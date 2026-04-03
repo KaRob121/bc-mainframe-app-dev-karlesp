@@ -1,0 +1,11 @@
+//MATEDGD JOB MSGLEVEL=(1,1),NOTIFY=&SYSUID                             00010000
+//PLIB    JCLLIB ORDER=(MATE1.PROCLIB)                                  00011000
+//*                                                                     00020000
+//*  COBOL + DB2 + CICS COMPILE JCL                                     00030000
+//*                                                                     00040000
+//DBONL   EXEC DB2CICSC,                                                00060000
+//             COPYLIB=&SYSUID..LAB.COPYLIB,   <= COPYBOOK LIBRARY      00070001
+//             DCLGLIB=&SYSUID..DCLGEN.COBOL,  <= DCLGEN LIBRARY        00080001
+//             DBRMLIB=&SYSUID..DBRMLIB,       <= DBRM LIBRARY          00090001
+//             SRCLIB=&SYSUID..LAB.COBOL,      <= SOURCE LIBRARY        00110001
+//             MEMBER=CUSTUP2                  <= SOURCE MEMBER         00120000

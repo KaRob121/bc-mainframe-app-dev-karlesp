@@ -1,0 +1,21 @@
+       01  FT-Constants.
+           05  FT-File-Name         pic x(08) value "FRTHROW".
+           05  FT-Channel-Name      pic x(16) value "FTChannel".
+           05  FT-Container-Name    pic x(16) value "FTContainer".
+           05  FT-View-Mapset       pic x(08) value "FRTVMSD".
+           05  FT-View-Map          pic x(08) value "FRTVMAP".
+           05  FT-View-Program      pic x(08) value "FRTVIEW".
+           05  FT-View-TransId      pic x(04) value "FRTV".
+           05  FT-Add-Mapset        pic x(08) value "FRTUMSD".
+           05  FT-Add-Map           pic x(08) value "FRTUMAP".
+           05  FT-Add-Program       pic x(08) value "FRTADD".
+           05  FT-Add-TransId       pic x(04) value "FRTA".
+           05  FT-Update-Mapset     pic x(08) value "FRTUMSD".
+           05  FT-Update-Map        pic x(08) value "FRTUMAP".
+           05  FT-Update-Program    pic x(08) value "FRTUPD".
+           05  FT-Update-TransId    pic x(04) value "FRTU".
+           05  FT-Delete-Mapset     pic x(08) value "FRTUMSD".
+           05  FT-Delete-Map        pic x(08) value "FRTUMAP".
+           05  FT-Delete-Program    pic x(08) value "FRTDEL".
+           05  FT-Delete-TransId    pic x(04) value "FRTD".
+           05  FT-Validation-Program pic x(08) value "FRTVAL".

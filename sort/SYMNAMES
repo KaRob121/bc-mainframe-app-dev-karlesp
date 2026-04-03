@@ -1,0 +1,11 @@
+Dept,38,4                    Dept number
+Dept_t,38,4,ZD               Dept number with data type
+Role_t,42,12,CH              Role with data type
+Role,42,12                   Role
+Sort_Name,2,21,CH            Concatenated name fields to sort on
+Surname,2,20                 Surname field for OUTREC
+First_Initial,22,1           First initial for OUTREC
+Period_Space,C'. '           Period and space to follow first initial
+Padding,'80:X'               Pad output records with spaces
+Active_Flag,1,1,CH           Active employee flag in input record
+Active_Status,C'A'           Value for active employee

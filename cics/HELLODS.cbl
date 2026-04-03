@@ -1,0 +1,21 @@
+01  HELLO-DATA-STREAM.
+    05 FILLER PIC X(01) VALUE X'F5'.  *> ERASE/WRITE
+    05 FILLER PIC X(01) VALUE X'11'.  *> SBA
+    05 FILLER PIC X(01) VALUE X'C1'.  *> Row 5, Col 18 (hi)
+    05 FILLER PIC X(01) VALUE X'51'.  *> Row 5, Col 18 (lo)
+    05 FILLER PIC X(01) VALUE X'C8'.  *> H
+    05 FILLER PIC X(01) VALUE X'85'.  *> e
+    05 FILLER PIC X(01) VALUE X'93'.  *> l
+    05 FILLER PIC X(01) VALUE X'93'.  *> l
+    05 FILLER PIC X(01) VALUE X'96'.  *> o
+    05 FILLER PIC X(01) VALUE X'6B'.  *> ,
+    05 FILLER PIC X(01) VALUE X'40'.  *> (space)
+    05 FILLER PIC X(01) VALUE X'E6'.  *> W
+    05 FILLER PIC X(01) VALUE X'96'.  *> o
+    05 FILLER PIC X(01) VALUE X'99'.  *> r
+    05 FILLER PIC X(01) VALUE X'93'.  *> l
+    05 FILLER PIC X(01) VALUE X'84'.  *> d
+    05 FILLER PIC X(01) VALUE X'5A'.  *> !
+    05 FILLER PIC X(01) VALUE X'13'.  *> Set Cursor Address
+    05 FILLER PIC X(01) VALUE X'C1'.  *> Cursor to Row 5, Col 18
+    05 FILLER PIC X(01) VALUE X'51'.

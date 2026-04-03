@@ -1,0 +1,5 @@
+ALPHA  KSDS1 Record 1
+BETA   KSDS1 Record 2
+GAMMA  KSDS1 Record 3
+DELTA  KSDS1 Record 4
+EPSILONKSDS1 Record 5

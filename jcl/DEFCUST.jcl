@@ -1,0 +1,32 @@
+//MATEDGI  JOB (ACCT),'DEFINE CUSTOMER KSDS',
+//             CLASS=A,MSGCLASS=X,MSGLEVEL=(1,1),
+//             NOTIFY=&SYSUID
+//*
+//STEP1    EXEC PGM=IDCAMS
+//SYSPRINT DD SYSOUT=*
+//SYSIN    DD *
+ DELETE MATEDG.CUSTFILE CLUSTER PURGE
+
+ IF LASTCC LE 8 THEN -
+   SET MAXCC = 0
+ DEFINE CLUSTER -
+   (NAME(MATEDG.CUSTFILE) -
+    VOLUMES(DEVHD3) -
+    RECORDSIZE(145 145) -
+    KEYS(10 0) -
+    FREESPACE(10 20) -
+    INDEXED -
+    CISZ(4096) -
+    CYLINDERS(2,1) -
+    UNIQUE) -
+ DATA -
+   (NAME(MATEDG.CUSTFILE.DATA)) -
+ INDEX -
+   (NAME(MATEDG.CUSTFILE.INDEX)) -
+ /*                                              */
+ /* LIST CATALOG TO VERIFY DEFINITION           */
+ /*                                              */
+ IF LASTCC LE 8 THEN -
+ LISTCAT ENTRIES(MATEDG.CUSTFILE) ALL
+/*
+//

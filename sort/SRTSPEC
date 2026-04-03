@@ -1,0 +1,3 @@
+ SORT FIELDS=(Dept_t,A,Role_t,D,Sort_Name,A)
+ INCLUDE COND=(Active_Flag,EQ,Active_Status)
+ OUTREC FIELDS=(Dept,First_Initial,Period_Space,Surname,Role,80:X)

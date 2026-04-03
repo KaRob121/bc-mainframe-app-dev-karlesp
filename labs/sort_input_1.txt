@@ -1,0 +1,17 @@
+862301Johnson, Peter G.             0200006250
+346577Petersen, Rayelle             0200020870
+404922Kaminsky, Robert              0200020433
+862301Johnson, Peter G.             0300106750
+346577Petersen, Rayelle             0300003345
+404922Kaminsky, Robert              0300011680
+862301Johnson, Peter G.             0400056505
+346577Petersen, Rayelle             0400098116
+404922Kaminsky, Robert              0400084567
+109303Bower, Andrew                 0400077066
+862301Johnson, Peter G.             0500092500
+346577Petersen, Rayelle             0500066785
+404922Kaminsky, Robert              0500074550
+109303Bower, Andrew                 0500079500
+346577Petersen, Rayelle             0600100600
+404922Kaminsky, Robert              0600070100
+109303Bower, Andrew                 0600089600

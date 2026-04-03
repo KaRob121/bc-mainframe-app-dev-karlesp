@@ -1,0 +1,72 @@
+VSAM KSDS 
+<userid>.INNOV.FRTHROW
+
+Team   Player  Games  Free throw attempts  Free throws completed  Three-pointers  Avg. completed  Avg. points
+                                                                                  per game        per game 
+
+         1         2         3         4         5         6         7      
+1234567890123456789012345678901234567890123456789012345678901234567890123456
+
+Team                Player              GGGGGAAAAACCCCC33333cccpppppUUUUUUUU
+
+Record Size 77 77
+Key         40 0
+
+
+copybook FRTHROW
+
+           05  FT-Team-Name          pic x(20).
+           05  FT-Player-Name        pic x(20).
+           05  FT-Games              pic 9(05).
+           05  FT-Attempts           pic 9(05).
+           05  FT-Completed          pic 9(05).
+           05  FT-Three-Pointers     pic 9(05).
+           05  FT-Pct-Completed      pic 9(03)v9.
+           05  FT-Avg-Points         pic 9(04)v9. 
+           05  FT-Last-Update        pic x(08).
+
+points = (FT-Completed - FT-Three-Pointers) * 2
+       + (FT-Three-Pointers) * 3
+
+QSAM data to seed KSDS 
+<userid>.INNOV.FRSEED
+<userid>.COBOL.COPY(FRTHROW)
+
+         1         2         3         4         5         6         7      
+1234567890123456789012345678901234567890123456789012345678901234567890123456
+
+Team                Player              GGGGGAAAAACCCCC33333cccpppppUUUUUUUU
+
+Morticians          Eddie the Embalmer  0008600267001050000603930002520240701
+Morticians          Connie Coffinwright 0007600211001250000905920003220240701 
+Necromancers        Nancy Mancer        0014400532002340001404400003320240701
+Sailors             Kelly Keelhauler    0010600622004080001606560003720240701
+Sailors             Ronnie Rudderman    0030200900003000002003330001920240701
+Zookeepers          Annie Amphibian     0015000550001220001102220002120240701
+
+
+QSAM update file 
+<userid>.INNOV.FRUPDATE
+<userid>.COBOL.COPY(FRUPDATE)
+
+FB LRECL 80 BLKSIZE 32000
+
+           05  FTU-Operation         pic x.
+               88  FTU-ADD           value "A".
+               88  FTU-DELETE        value "D".
+               88  FTU-UPDATE        value "U".
+           05  FTU-Team-Name         pic x(20).
+           05  FTU-Player-Name       pic x(20).
+           05  FTU-Games             pic 9(03).
+           05  FTU-Attempts          pic 9(03).
+           05  FTU-Completed         pic 9(03).
+           05  FTU-Three-Pointers    pic 9(03).
+           05  filler                pic x(28).                     
+
+UMorticians          Eddie the Embalmer  004020016004
+UMorticians          Connie Coffinwright 005018011002
+USailors             Kelly Keelhauler    008024X14002
+DNecromancers        Nancy Mancer                    
+USailors             Ronnie Rudderman    007028019003
+UZookeepers          Annie Amphibian     006024020003
+AZookeepers          Penny Primate       008032022005
