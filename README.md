@@ -22,4 +22,4 @@
 
 # Software Development Lifecycle
 
-### [Software Development Lifecycle](/labs/sdlc)
+### [Software Development Lifecycle](sdlc)
