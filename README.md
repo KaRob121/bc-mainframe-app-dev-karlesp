@@ -20,6 +20,6 @@
 
 ### [Mass Mailing](capstone/Mass_Mailing.md)
 
-# SDLC
+# Software Development Lifecycle
 
-### [sdlc](/labs/sdlc)
+### [Software Development Lifecycle](/labs/sdlc)
