@@ -23,3 +23,7 @@
 # Software Development Lifecycle
 
 ### [Software Development Lifecycle](sdlc)        
+
+# Modern Tooling and DevOps Integration
+
+### [Software Development Lifecycle](modern-tooling)        
