@@ -26,4 +26,4 @@
 
 # Modern Tooling and DevOps Integration
 
-### [Software Development Lifecycle](modern-tooling)        
+### [Modern Tooling and DevOps Integration](modern-tooling)        
