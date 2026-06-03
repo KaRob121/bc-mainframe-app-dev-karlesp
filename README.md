@@ -20,10 +20,17 @@
 
 ### [Mass Mailing](capstone/Mass_Mailing.md)
 
-# Software Development Lifecycle
+## Software Development Lifecycle
 
 ### [Software Development Lifecycle](sdlc)        
 
 # Modern Tooling and DevOps Integration
 
 ### [Modern Tooling and DevOps Integration](modern-tooling)        
+
+## OpenShift 
+
+#### [Explore OpenShift Resources](openshift/openshift-resources/index.md)   
+#### [Deploying Microservices](openshift/openshift-microservices/index.md)      
+#### [Configmaps and Secrets](openshift/openshift-configmaps-secrets/index.md)      
+#### [OpenShift Scheduling](openshift/openshift-scheduling/index.md)      
