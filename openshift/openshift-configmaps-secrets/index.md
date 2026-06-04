@@ -102,6 +102,8 @@ Apply it:
 oc apply -f env-pod.yaml
 ```
 
+> **Note:** You will see a `PodSecurity "restricted:latest"` warning when applying Pod manifests in this lab. This is expected — OpenShift flags containers that omit security context fields (non-root user, dropped capabilities, etc.). The Pods are still created and run successfully.
+
 Wait a few seconds for the Pod to start, then verify the environment variables:
 
 ```bash

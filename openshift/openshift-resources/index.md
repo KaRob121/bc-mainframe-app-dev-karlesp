@@ -508,6 +508,26 @@ View everything in the project:
 oc get all
 ```
 
+```
+Warning: apps.openshift.io/v1 DeploymentConfig is deprecated in v4.14+, unavailable in v4.10000+
+NAME                                        READY   STATUS    RESTARTS   AGE
+pod/nginx-deployment-5d5cf8d7fc-abc12       1/1     Running   0          2m
+pod/nginx-deployment-5d5cf8d7fc-def34       1/1     Running   0          2m
+pod/nginx-deployment-5d5cf8d7fc-ghi56       1/1     Running   0          2m
+
+NAME                    TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/nginx-service   ClusterIP   172.30.45.123   <none>        80/TCP    90s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deployment   3/3     3            3           2m
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deployment-5d5cf8d7fc   3         3         3       2m
+
+NAME                                                  HOST/PORT                                           PATH   SERVICES        PORT   TERMINATION   WILDCARD
+route.route.openshift.io/nginx-service   nginx-service-k8s-resources.apps.example.com                           nginx-service   80                   None
+```
+
 This shows your Deployment, ReplicaSet, Pods, Service, and Route in a single view.
 
 ### Final Self-Healing Test
