@@ -29,6 +29,7 @@
 ### [Modern Tooling and DevOps Integration](modern-tooling)        
 
 ## OpenShift 
+[OpenShift clusters](bastion-list.md)  
 
 #### [Explore OpenShift Resources](openshift/openshift-resources/index.md)   
 #### [Deploying Microservices](openshift/openshift-microservices/index.md)      
