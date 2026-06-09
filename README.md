@@ -44,4 +44,4 @@
 ### [OpenShift Scheduling](openshift/openshift-scheduling/index.md)      
 
 ## Data Platforms
-### [MongoDB](mongodb-day1)   
+### [MongoDB](data_platforms/mongodb-day1/)   
