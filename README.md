@@ -37,8 +37,11 @@
 ## OpenShift 
 [OpenShift clusters](/openshift/bastion-list.md)  
 
-#### [Connect to the Cluster](openshift/connect-cluster/index.md)
-#### [Explore OpenShift Resources](openshift/openshift-resources/index.md)   
-#### [Deploying Microservices](openshift/openshift-microservices/index.md)      
-#### [Configmaps and Secrets](openshift/openshift-configmaps-secrets/index.md)      
-#### [OpenShift Scheduling](openshift/openshift-scheduling/index.md)      
+### [Connect to the Cluster](openshift/connect-cluster/index.md)
+### [Explore OpenShift Resources](openshift/openshift-resources/index.md)   
+### [Deploying Microservices](openshift/openshift-microservices/index.md)      
+### [Configmaps and Secrets](openshift/openshift-configmaps-secrets/index.md)      
+### [OpenShift Scheduling](openshift/openshift-scheduling/index.md)      
+
+## Data Platforms
+### [MongoDB](labs/mongodb-day1)   
