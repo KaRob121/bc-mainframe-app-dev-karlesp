@@ -6,6 +6,12 @@
 
 ### [COBOL Labs](labs/COBOL_Labs.md)
 
+### MongoDB Day 1 Labs (ETL, Migration & Hybrid Integration)
+
+- [Lab 1: MongoDB Atlas Fundamentals](labs/mongodb-day1/Lab_01_MongoDB_Atlas_Fundamentals/README.md)
+- [Lab 2: Data Migration Simulation](labs/mongodb-day1/Lab_02_Data_Migration_Simulation/README.md)
+- [Lab 3: Hybrid Data Integration Pipeline](labs/mongodb-day1/Lab_03_Hybrid_Data_Integration_Pipeline/README.md)
+
 ## Sample Code 
 
 ### [Job Control Language (JCL) and z/OS Utilities samples](jcl/JCL_Samples.md)
