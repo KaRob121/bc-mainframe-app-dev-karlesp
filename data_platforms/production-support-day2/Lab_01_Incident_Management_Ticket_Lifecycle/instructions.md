@@ -4,7 +4,7 @@
 
 **Tools needed:** Microsoft Excel or Google Sheets
 
-> **Optional:** Copy [tmpl/lab1_starter.xlsx](tmpl/lab1_starter.xlsx) instead of starting from a blank workbook in Step 1.
+> **Optional:** Copy [template/lab1_starter.xlsx](template/lab1_starter.xlsx) instead of starting from a blank workbook in Step 1.
 
 ---
 
