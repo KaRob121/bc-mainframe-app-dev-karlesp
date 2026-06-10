@@ -15,6 +15,7 @@
 ### Production Support Day 2 Labs
 
 - [Lab 1: Incident Management & Ticket Lifecycle](labs/production-support-day2/Lab_01_Incident_Management_Ticket_Lifecycle/README.md)
+- [Lab 2: Linux System Debugging & Root Cause Analysis](labs/production-support-day2/Lab_02_Linux_Debugging_Root_Cause_Analysis/README.md)
 
 ## Sample Code 
 
