@@ -23,7 +23,7 @@ By the end of this lab, you will be able to:
 
 | Document | Location |
 |----------|----------|
-| Severity Matrix (P1–P4) | Included in Step 2 |
+| Severity Matrix (P1–P4) | Included in Step 3 |
 | Escalation Rules | Included in Step 5 |
 | Sample Ticket Data | Included in Step 4 |
 
@@ -36,10 +36,6 @@ By the end of this lab, you will be able to:
 1. Open **Microsoft Excel** or **Google Sheets**
 2. Create a **new blank workbook**
 3. Save it as: `lab1_incident_tickets.xlsx`
-
-**Deliverable:** Screenshot showing empty workbook with filename
-
-**Reply:** `"M1 done"` + upload screenshot
 
 ---
 
@@ -54,10 +50,6 @@ Add these **column headers** in Row 1:
 | A | B | C | D | E | F | G | H | I |
 |---|---|---|---|---|---|---|---|---|
 | Ticket ID | Created Date | Created Time | Priority | Category | Summary | Description | Current Tier | Status |
-
-**Deliverable:** Screenshot showing the Ticket Log sheet with column headers
-
-**Reply:** `"M2 done"` + upload screenshot
 
 ---
 
@@ -76,10 +68,6 @@ Copy this table into the sheet:
 | P3 | Minor issue, low user impact | 1 hour | 24 hours | Reporting export missing column |
 | P4 | Cosmetic issue, question, documentation | 4 hours | 48 hours | UI typo, "how do I..." |
 
-**Deliverable:** Screenshot showing the Severity Matrix sheet
-
-**Reply:** `"M3 done"` + upload screenshot
-
 ---
 
 ## Step 4 – Create Your First Incident Ticket
@@ -93,10 +81,6 @@ In the **Ticket Log** sheet, add this row:
 | A | B | C | D | E | F | G | H | I |
 |---|---|---|---|---|---|---|---|---|
 | INC-001 | 2026-06-10 | 09:00 | P1 | Payment API | Payment API returning PAY-500 | 100% failure rate. No workaround. Impacting all merchants. | L1 | Open |
-
-**Deliverable:** Screenshot showing the Ticket Log with INC-001 added
-
-**Reply:** `"M4 done"` + upload screenshot
 
 ---
 
@@ -113,10 +97,6 @@ Copy this table:
 | L1 | L2 | 5 minutes | 15 minutes | 1 hour | 4 hours |
 | L2 | L3 | 30 minutes | 2 hours | 8 hours | N/A |
 
-**Deliverable:** Screenshot showing Escalation Rules sheet
-
-**Reply:** `"M5 done"` + upload screenshot
-
 ---
 
 ## Step 6 – Simulate L1 Troubleshooting
@@ -129,10 +109,6 @@ In the **Ticket Log** sheet, update the INC-001 row:
 
 - Change **Status** from `Open` to `Escalated to L2`
 - Add a **new column** called `Escalation Time` (Column J) and enter `5 min`
-
-**Deliverable:** Screenshot showing the updated ticket status
-
-**Reply:** `"M6 done"` + upload screenshot
 
 ---
 
@@ -148,10 +124,6 @@ In the **Ticket Log** sheet:
 - Add a **new column** called `Resolution Action` (Column L) and enter: `Increased pool size from 1000 to 2000`
 - Change **Status** to `Resolved - Pending Verification`
 
-**Deliverable:** Screenshot showing the ticket with root cause and resolution
-
-**Reply:** `"M7 done"` + upload screenshot
-
 ---
 
 ## Step 8 – Simulate User Verification and Closure
@@ -164,10 +136,6 @@ In the **Ticket Log** sheet:
 
 - Change **Status** to `Closed`
 - Add a **new column** called `Resolution Category` (Column M) and enter: `Configuration Change`
-
-**Deliverable:** Screenshot showing the completed ticket (all columns filled)
-
-**Reply:** `"M8 done"` + upload screenshot
 
 ---
 
@@ -188,13 +156,9 @@ Add **two more tickets** to your Ticket Log sheet:
 
 Write your decision in a **new column** called `Escalation Decision`
 
-**Deliverable:** Screenshot showing INC-002 and INC-003 added with escalation decisions
-
-**Reply:** `"M9 done"` + upload screenshot
-
 ---
 
-## Step 10 – Final Deliverables Checklist
+## Step 10 – Final Checklist
 
 Verify your Excel file contains:
 
@@ -205,10 +169,6 @@ Verify your Excel file contains:
 | 3 | Escalation Rules | L1→L2→L3 time thresholds |
 
 **Final Action:** Save your Excel file as `lab1_[yourname].xlsx`
-
-**Deliverable:** Screenshot showing all three sheets (tabs) at the bottom of Excel
-
-**Reply:** `"M10 done – Lab 1 complete"` + upload final screenshot
 
 ---
 
@@ -235,7 +195,7 @@ Write your answer in a few sentences. Discuss with your instructor or group afte
 
 ---
 
-## Troubleshooting Tips for Participants
+## Troubleshooting Tips
 
 | Problem | Solution |
 |---------|----------|
@@ -249,8 +209,8 @@ Write your answer in a few sentences. Discuss with your instructor or group afte
 
 ## Ready to Begin?
 
-Reply with: `"M1 done"` and your first screenshot showing the empty Excel workbook.
+Open Excel or Google Sheets and start with **Step 1**.
 
-Follow the steps sequentially from M1 to M10.
+Follow the steps sequentially from Step 1 through Step 10.
 
 **Good luck, incident managers!** 🚨

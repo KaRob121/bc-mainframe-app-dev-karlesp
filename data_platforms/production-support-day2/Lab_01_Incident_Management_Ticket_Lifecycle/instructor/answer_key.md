@@ -48,26 +48,12 @@
 
 ---
 
-## Grading Rubric
-
-| Section | Points | Criteria |
-|---------|--------|----------|
-| M1-M3 | 10 | Workbook created, 3 sheets with correct headers |
-| M4-M5 | 15 | INC-001 created correctly, Escalation Rules added |
-| M6-M8 | 25 | Proper escalation, root cause, resolution, closure |
-| M9 | 20 | INC-002 & INC-003 added with correct escalation decisions |
-| M10 | 30 | All 3 sheets present, file named correctly, screenshot shows completion |
-| **Total** | **100** | |
-
----
-
 ## Instructor Notes
 
 ### Setup Requirements
 
 - Ensure participants have Excel or Google Sheets access
-- Prepare a shared folder for screenshot submissions
-- Estimated time includes screenshot taking/uploading
+- Estimated time: 20–25 minutes
 
 ### Delivery Tips
 
