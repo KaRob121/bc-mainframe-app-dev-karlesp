@@ -49,10 +49,11 @@ sudo journalctl -u payment-processor -n 50
 ## Step 4 – Find What Is Using Port 8080
 
 ```bash
-ss -tulpn | grep 8080
+sudo ss -tulpn | grep 8080
+pgrep -af rogue-process.py
 ```
 
-**What to look for:** A `python3` process (rogue legacy process) holding port 8080. Note the **PID**.
+**What to look for:** A `python3` process (rogue legacy process) holding port 8080. Note the **PID** from either command.
 
 ---
 
@@ -72,12 +73,15 @@ Replace `<PID>` with the process ID from Step 4.
 
 ```bash
 sudo kill -9 <PID>
+# Only if needed — use the full path to avoid killing your shell session:
+# sudo pkill -f '/opt/rogue-process.py'
 ```
 
 Verify port 8080 is free:
 
 ```bash
-ss -tulpn | grep 8080
+sudo ss -tulpn | grep 8080
+pgrep -af rogue-process.py
 ```
 
 (No output means the port is free.)
@@ -87,6 +91,7 @@ ss -tulpn | grep 8080
 ## Step 7 – Restart the Service
 
 ```bash
+sudo systemctl reset-failed payment-processor
 sudo systemctl restart payment-processor
 ```
 

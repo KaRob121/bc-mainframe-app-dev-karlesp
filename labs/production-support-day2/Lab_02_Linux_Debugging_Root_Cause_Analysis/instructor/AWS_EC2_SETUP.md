@@ -81,7 +81,8 @@ chmod +x create_broken_system.sh
 
 ```bash
 systemctl status payment-processor
-ss -tulpn | grep 8080
+sudo ss -tulpn | grep 8080
+pgrep -af rogue-process.py
 sudo journalctl -u payment-processor -n 20
 ```
 

@@ -31,6 +31,7 @@ EOF
 
 chmod +x /opt/rogue-process.py
 nohup python3 /opt/rogue-process.py > /var/log/rogue-process.log 2>&1 &
+sleep 2
 
 # Create broken service
 cat > /etc/systemd/system/payment-processor.service << 'EOF'
