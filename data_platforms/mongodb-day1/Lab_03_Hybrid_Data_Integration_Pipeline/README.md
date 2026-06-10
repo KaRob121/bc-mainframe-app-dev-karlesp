@@ -36,32 +36,7 @@
 
 ### The Three Integration Patterns
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         HYBRID INTEGRATION PIPELINE                          │
-├─────────────────────────────────────────────────────────────────────────────┤
-│                                                                              │
-│   ┌──────────────────┐    ┌──────────────────┐    ┌──────────────────┐      │
-│   │   BATCH          │    │   API            │    │   CDC            │      │
-│   │   INTEGRATION    │    │   INTEGRATION    │    │   INTEGRATION    │      │
-│   │                  │    │                  │    │                  │      │
-│   │ "Load everything │    │ "Fetch on        │    │ "React to        │      │
-│   │  at once"        │    │  demand"         │    │  changes"        │      │
-│   └────────┬─────────┘    └────────┬─────────┘    └────────┬─────────┘      │
-│            │                       │                       │                 │
-│            ▼                       ▼                       ▼                 │
-│   ┌─────────────────────────────────────────────────────────────────────┐    │
-│   │                         MONGODB ATLAS                               │    │
-│   │                                                                      │    │
-│   │   ┌─────────────┐      ┌─────────────────┐      ┌───────────────┐   │    │
-│   │   │   orders    │ ───► │ enriched_orders │      │ daily_summary │   │    │
-│   │   │ (batch)     │      │ (API enriched)  │      │ (CDC updated) │   │    │
-│   │   └─────────────┘      └─────────────────┘      └───────────────┘   │    │
-│   │                                                                      │    │
-│   └─────────────────────────────────────────────────────────────────────┘    │
-│                                                                              │
-└─────────────────────────────────────────────────────────────────────────────┘
-```
+<img src="diagrams/integration-patterns.svg" alt="Hybrid Integration Pipeline" width="520"/>
 
 | Pattern | Description | When to use |
 |---------|-------------|-------------|
@@ -533,6 +508,10 @@ CDC PROCESSING SUMMARY
 - Each insert updated `daily_summary` via a CDC trigger
 - Total orders in `hybrid_db.orders` is now **11** (7 batch + 4 CDC)
 
+**Theoretical note — CDC architecture:**
+
+<img src="diagrams/cdc-architecture.svg" alt="CDC Event-Driven Architecture" width="400"/>
+
 ---
 
 ## Part 5: Query and Verify Results (3 minutes)
@@ -750,6 +729,10 @@ Click each collection in the left panel (**Documents** tab):
 | Batch | `batch_load.py` | 7 orders | Minutes | Historical data |
 | API | `api_enrich.py` | 7 enriched | Seconds | Data enrichment |
 | CDC | `cdc_simulate.py` | 4 orders | Milliseconds | Real-time analytics |
+
+### Pipeline data flow summary
+
+<img src="diagrams/pipeline-flow.svg" alt="Complete Hybrid Pipeline data flow" width="420"/>
 
 ---
 

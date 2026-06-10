@@ -27,6 +27,22 @@
 
 ---
 
+## Theoretical Foundation: Data Migration
+
+### The ETL Pattern
+
+Data migration follows the **ETL (Extract, Transform, Load)** pattern:
+
+<img src="diagrams/etl-pattern.svg" alt="ETL Pattern: Extract, Transform, Load" width="480"/>
+
+| Phase | What Happens | In This Lab |
+|-------|--------------|-------------|
+| **Extract** | Read data from source system | Read `customers.csv` (simulating Oracle table) |
+| **Transform** | Cleanse, validate, reshape data | Profile, deduplicate, fix missing values, standardize |
+| **Load** | Write to target database | Insert documents into MongoDB Atlas |
+
+---
+
 ## Part 1: Connect to EC2 Instance (2 minutes)
 
 ### Step 1.1: Connect via AWS Console
@@ -334,6 +350,10 @@ Created index on customerId
 | 1002 | Missing email, `ca` state | Email: `unknown@example.com`, State: `CA` ✅ |
 | 1003 | ` Bob Wilson`, `California` state | Name: `Bob Wilson`, State: `CA` ✅ |
 | 1004 | Missing email | Email: `unknown@example.com` ✅ |
+
+### Source to Target Mapping Summary
+
+<img src="diagrams/field-mapping.svg" alt="Source to Target Mapping" width="520"/>
 
 ---
 
