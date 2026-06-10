@@ -21,6 +21,8 @@
 - [ ] AWS EC2 instance running (provided by instructor)
 - [ ] MongoDB Atlas connection string ready
 
+> **Which files need your credentials?** See **[Day 1 Configuration Guide](../CONFIGURATION.md)** — only the connection string at the `migration.py` prompt; no script edits on disk.
+
 > **Launching your own EC2?** See **[Appendix A: EC2 Instance Setup Guide](../EC2_Instance_Setup_Guide.md)** — use **EC2 Instance Connect** (browser terminal). Local SSH, PowerShell, and WSL are not required.
 
 > **Atlas UI note:** To browse data, use **Database** → **Data Explorer**, or click **Browse Collections** on your cluster.
@@ -287,7 +289,7 @@ Connection string:
 At the `Connection string:` prompt in your EC2 terminal, paste your connection string:
 
 ```
-mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@lab1-cluster.lqoxac5.mongodb.net/
+mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/
 ```
 
 Then press **Enter**.

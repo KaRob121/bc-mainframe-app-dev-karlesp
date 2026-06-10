@@ -18,6 +18,8 @@
 - [ ] Web browser (Chrome, Firefox, Edge, or Safari)
 - [ ] Email address (to create Atlas account)
 
+> **Configuration:** Lab 1 has **no files to edit**. See **[Day 1 Configuration Guide](../CONFIGURATION.md)** for where credentials are used across all labs.
+
 ---
 
 ## Atlas UI Quick Reference

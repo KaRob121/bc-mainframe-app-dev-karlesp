@@ -24,6 +24,8 @@ Use this guide to create the **`Training-Lab`** EC2 instance for **Lab 2** and *
 - [ ] Web browser
 - [ ] 10–15 minutes of setup time
 
+> **Configuration:** The user data script needs **no personal credentials**. For Atlas connection strings used after setup, see **[Day 1 Configuration Guide](CONFIGURATION.md)**.
+
 ---
 
 ## Part 1: Log into AWS Console (1 minute)
