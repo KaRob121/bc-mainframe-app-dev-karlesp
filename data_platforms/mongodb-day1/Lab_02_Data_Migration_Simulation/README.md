@@ -21,7 +21,7 @@
 - [ ] AWS EC2 instance running (provided by instructor)
 - [ ] MongoDB Atlas connection string ready
 
-> **Launching your own EC2?** See **[Appendix A: EC2 Instance Setup Guide](EC2_Instance_Setup_Guide.md)** — use **EC2 Instance Connect** (browser terminal). Local SSH, PowerShell, and WSL are not required.
+> **Launching your own EC2?** See **[Appendix A: EC2 Instance Setup Guide](../EC2_Instance_Setup_Guide.md)** — use **EC2 Instance Connect** (browser terminal). Local SSH, PowerShell, and WSL are not required.
 
 > **Atlas UI note:** To browse data, use **Database** → **Data Explorer**, or click **Browse Collections** on your cluster.
 

@@ -22,7 +22,7 @@
 - [ ] AWS EC2 instance running (`Training-Lab`)
 - [ ] MongoDB Atlas connection string ready
 
-> **Need an EC2 instance?** Follow **[Appendix A: EC2 Instance Setup Guide](EC2_Instance_Setup_Guide.md)** — use **EC2 Instance Connect** (browser terminal).
+> **Need an EC2 instance?** Follow **[Appendix A: EC2 Instance Setup Guide](../EC2_Instance_Setup_Guide.md)** — use **EC2 Instance Connect** (browser terminal).
 
 > **Atlas UI note:** To browse data, use **Database** → **Data Explorer**, or click **Browse Collections** on your cluster.
 
