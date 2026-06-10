@@ -482,15 +482,35 @@ Names with leading/trailing spaces: 1
 Data Quality Score: 0%
 ```
 
-### Step 8.2: Test MongoDB connection
+### Step 8.2: Whitelist EC2 IP in Atlas
+
+From the EC2 terminal:
+
+```bash
+curl -s https://checkip.amazonaws.com
+```
+
+In Atlas → **Database** → **Network Access** → **Add IP Address**, paste that IP (or use **Allow Access from Anywhere** for class labs). Wait **1–2 minutes** for the rule to show **Active**.
+
+### Step 8.3: Install certifi (SSL certificates)
+
+```bash
+pip3 install --upgrade pymongo certifi --user
+```
+
+### Step 8.4: Test MongoDB connection
 
 Replace with your Atlas connection string:
 
 ```bash
 python3 -c "
+import certifi
 from pymongo import MongoClient
 try:
-    client = MongoClient('mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/')
+    client = MongoClient(
+        'mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/',
+        tlsCAFile=certifi.where()
+    )
     client.admin.command('ping')
     print('✅ Connection successful!')
 except Exception as e:
@@ -504,7 +524,7 @@ except Exception as e:
 ✅ Connection successful!
 ```
 
-> Add the EC2 **public IP** to Atlas → **Database** → **Network Access** if the test fails.
+> If you see `SSL handshake failed` or `TLSV1_ALERT_INTERNAL_ERROR`, see **Troubleshooting** — whitelist the EC2 IP first, then ensure `certifi` is installed.
 
 ---
 
@@ -540,8 +560,9 @@ except Exception as e:
 | Cannot connect via Instance Connect | Security group must allow SSH (port 22) |
 | User data script didn't run | `sudo cat /var/log/cloud-init-output.log` |
 | `migration.py` shows 194 bytes | Run Part 7 to replace with full script |
-| `pymongo` not found | `pip3 install pymongo --user` |
-| Connection failed | Add EC2 public IP to Atlas **Network Access** |
+| `pymongo` not found | `pip3 install pymongo certifi --user` |
+| `SSL handshake failed` / `TLSV1_ALERT_INTERNAL_ERROR` | Whitelist EC2 IP in Atlas **Network Access** (`curl -s https://checkip.amazonaws.com`), wait 1–2 min, then `pip3 install --upgrade certifi --user` and use `tlsCAFile=certifi.where()` in `MongoClient` |
+| Connection failed (other) | Add EC2 public IP to Atlas **Network Access** |
 | `command not found: python3` | `sudo dnf install python3 -y` |
 
 ---

@@ -132,10 +132,10 @@ customer_id,name,email,state,phone,signup_date
 
 ## Part 3: Install Required Python Package (1 minute)
 
-### Step 3.1: Install pymongo
+### Step 3.1: Install pymongo and certifi
 
 ```bash
-pip3 install pymongo --user
+pip3 install pymongo certifi --user
 ```
 
 **Expected output:**
@@ -152,15 +152,34 @@ Successfully installed pymongo-4.17.0
 
 ## Part 4: Test MongoDB Atlas Connection (1 minute)
 
+### Step 4.0: Whitelist your EC2 IP in Atlas (do this first)
+
+From your EC2 terminal, get the instance public IP:
+
+```bash
+curl -s https://checkip.amazonaws.com
+```
+
+In **MongoDB Atlas** → **Database** → **Network Access** → **Add IP Address**:
+
+1. Paste the IP from the command above, **or**
+2. For a class lab only: choose **Allow Access from Anywhere** (`0.0.0.0/0`)
+
+Wait **1–2 minutes** for the rule to become **Active** before testing the connection.
+
 ### Step 4.1: Test connection from EC2 to Atlas
 
 Replace the connection string with your own:
 
 ```bash
 python3 -c "
+import certifi
 from pymongo import MongoClient
 try:
-    client = MongoClient('mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/')
+    client = MongoClient(
+        'mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/',
+        tlsCAFile=certifi.where()
+    )
     client.admin.command('ping')
     print('✅ Connection successful!')
 except Exception as e:
@@ -174,7 +193,7 @@ except Exception as e:
 ✅ Connection successful!
 ```
 
-> ⚠️ If you see `❌ Connection failed`, add your EC2 **public IP** to Atlas → **Database** → **Network Access** → **Add IP Address**.
+> ⚠️ If you see `SSL handshake failed` or `TLSV1_ALERT_INTERNAL_ERROR`, see **Troubleshooting** below — this is almost always a **Network Access** IP whitelist issue or missing CA certificates on EC2.
 
 ---
 
@@ -402,8 +421,9 @@ Created index on customerId
 | Issue | Solution |
 |-------|----------|
 | `command not found: python3` | Run `sudo dnf install python3 -y` |
-| `ModuleNotFoundError: No module named 'pymongo'` | Run `pip3 install pymongo --user` |
-| `Connection failed` | Add EC2 public IP to Atlas → **Network Access** |
+| `ModuleNotFoundError: No module named 'pymongo'` | Run `pip3 install pymongo certifi --user` |
+| `SSL handshake failed` / `TLSV1_ALERT_INTERNAL_ERROR` | **1)** Run `curl -s https://checkip.amazonaws.com` on EC2 and add that IP to Atlas → **Network Access** (wait 1–2 min). **2)** Run `pip3 install --upgrade pymongo certifi --user`. **3)** Use `tlsCAFile=certifi.where()` in `MongoClient` (see Part 4.1). **4)** Run `sudo dnf update -y ca-certificates` and retry. |
+| `Connection failed` (other) | Add EC2 public IP to Atlas → **Network Access** |
 | `migration.py` is only ~194 bytes | Ask instructor — file should be ~4 KB; EC2 image may need redeploy |
 | Connection string invalid | Re-copy from Atlas → **Connect** → **Drivers** |
 | Can't find `migration_db` | Re-run `python3 migration.py --migrate` and refresh Data Explorer |
