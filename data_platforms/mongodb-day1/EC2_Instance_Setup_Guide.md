@@ -173,7 +173,7 @@ dnf update -y
 dnf install -y python3 python3-pip
 
 # Install Python libraries
-pip3 install pymongo pandas
+pip3 install pymongo pandas certifi
 
 # Create lab directories
 mkdir -p /home/ec2-user/lab2 /home/ec2-user/lab3
@@ -328,6 +328,7 @@ cat > /home/ec2-user/lab2/migration.py << 'EOF'
 
 import argparse
 import csv
+import certifi
 from datetime import datetime
 from pymongo import MongoClient
 
@@ -391,7 +392,7 @@ def cleanse_data(records):
 
 def load_to_mongodb(records, conn_str):
     print("\n=== LOADING TO MONGODB ===\n")
-    client = MongoClient(conn_str)
+    client = MongoClient(conn_str, tlsCAFile=certifi.where())
     db = client.migration_db
     collection = db.customers
     documents = []

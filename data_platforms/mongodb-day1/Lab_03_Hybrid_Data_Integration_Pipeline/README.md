@@ -74,22 +74,47 @@ cd /home/ec2-user/lab3
 
 **Expected output:** No output — you are now in the `lab3` directory.
 
-### Step 1.3: Install required Python library
+### Step 1.3: Install required Python libraries
 
 ```bash
-pip3 install requests --user
+pip3 install pymongo certifi requests --user
 ```
 
 **Expected output:**
 
 ```
-Collecting requests
-  Downloading requests-2.32.3-py3-none-any.whl (64 kB)
-Installing collected packages: urllib3, idna, charset-normalizer, certifi, requests
-Successfully installed certifi-2024.12.14 charset-normalizer-3.4.1 idna-3.10 requests-2.32.3 urllib3-2.3.0
+Successfully installed certifi-... pymongo-... requests-...
 ```
 
-> `pymongo` should already be installed from Lab 2. If not: `pip3 install pymongo --user`
+### Step 1.4: Verify Atlas connection from EC2 (do this before Part 2)
+
+**Whitelist EC2 IP** — from EC2 terminal:
+
+```bash
+curl -s https://checkip.amazonaws.com
+```
+
+Add that IP in Atlas → **Database** → **Network Access** → **Add IP Address**. Wait **1–2 minutes** for **Active**.
+
+**Test connection:**
+
+```bash
+python3 -c "
+import certifi
+from pymongo import MongoClient
+try:
+    client = MongoClient(
+        'mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/',
+        tlsCAFile=certifi.where()
+    )
+    client.admin.command('ping')
+    print('✅ Connection successful!')
+except Exception as e:
+    print(f'❌ Connection failed: {e}')
+"
+```
+
+> ⚠️ If you see `SSL handshake failed` or `TLSV1_ALERT_INTERNAL_ERROR`, see **Troubleshooting** below or [Lab 2 Part 4](../Lab_02_Data_Migration_Simulation/README.md#part-4-test-mongodb-atlas-connection-1-minute).
 
 ---
 
@@ -107,6 +132,7 @@ cat > batch_load.py << 'EOF'
 """Batch Load Module - Historical Data Integration"""
 
 import csv
+import certifi
 from datetime import datetime
 from pymongo import MongoClient
 
@@ -153,7 +179,7 @@ def load_batch_orders(connection_string):
         }
         documents.append(doc)
 
-    client = MongoClient(connection_string)
+    client = MongoClient(connection_string, tlsCAFile=certifi.where())
     db = client.hybrid_db
     collection = db.orders
 
@@ -227,6 +253,7 @@ cat > api_enrich.py << 'EOF'
 #!/usr/bin/env python3
 """API Integration Module - External Data Enrichment"""
 
+import certifi
 from datetime import datetime
 from pymongo import MongoClient
 
@@ -253,7 +280,7 @@ def enrich_orders(connection_string):
     print("API INTEGRATION: ENRICH ORDERS WITH CUSTOMER DATA")
     print("=" * 60)
 
-    client = MongoClient(connection_string)
+    client = MongoClient(connection_string, tlsCAFile=certifi.where())
     db = client.hybrid_db
 
     orders = list(db.orders.find({}))
@@ -367,6 +394,7 @@ cat > cdc_simulate.py << 'EOF'
 #!/usr/bin/env python3
 """CDC Simulation Module - Real-time Change Data Capture"""
 
+import certifi
 from datetime import datetime
 from pymongo import MongoClient
 import time
@@ -404,7 +432,7 @@ def simulate_cdc(connection_string):
     print("CDC SIMULATION: REAL-TIME ORDER PROCESSING")
     print("=" * 60)
 
-    client = MongoClient(connection_string)
+    client = MongoClient(connection_string, tlsCAFile=certifi.where())
     db = client.hybrid_db
     orders_collection = db.orders
     summary_collection = db.daily_summary
@@ -525,6 +553,7 @@ cat > query_results.py << 'EOF'
 #!/usr/bin/env python3
 """Query Module - Display Hybrid Pipeline Results"""
 
+import certifi
 from pymongo import MongoClient
 
 CDC_ORDER_COUNT = 4
@@ -536,7 +565,7 @@ def display_results(connection_string):
     print("HYBRID DATA INTEGRATION PIPELINE - COMPLETE RESULTS")
     print("=" * 70)
 
-    client = MongoClient(connection_string)
+    client = MongoClient(connection_string, tlsCAFile=certifi.where())
     db = client.hybrid_db
 
     print("\n📦 1. BATCH INTEGRATION - Historical Orders")
@@ -757,8 +786,9 @@ Click each collection in the left panel (**Documents** tab):
 | Issue | Solution |
 |-------|----------|
 | `ModuleNotFoundError: No module named 'requests'` | `pip3 install requests --user` |
-| `ModuleNotFoundError: No module named 'pymongo'` | `pip3 install pymongo --user` |
-| Connection failed | Add EC2 public IP to Atlas → **Network Access** |
+| `ModuleNotFoundError: No module named 'pymongo'` | `pip3 install pymongo certifi --user` |
+| `SSL handshake failed` / `TLSV1_ALERT_INTERNAL_ERROR` | Whitelist EC2 IP (`curl -s https://checkip.amazonaws.com`) in Atlas **Network Access**, wait 1–2 min, then `pip3 install --upgrade pymongo certifi --user`. All Lab 3 scripts use `tlsCAFile=certifi.where()`. |
+| Connection failed (other) | Add EC2 public IP to Atlas → **Network Access** |
 | No orders found | Run `batch_load.py` first |
 | `enriched_orders` empty | Run `api_enrich.py` after batch load |
 | `daily_summary` empty | Run `cdc_simulate.py` last |

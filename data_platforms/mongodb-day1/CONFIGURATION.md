@@ -52,10 +52,11 @@ mongodb+srv://YOUR_USERNAME:YOUR_PASSWORD@YOUR_CLUSTER.mongodb.net/
 | **Edit the file?** | ❌ No — connection string is entered when prompted |
 | **When** | Running `python3 migration.py --migrate` |
 
-**Script behavior (no change needed):**
+**Script behavior:** Prompts for connection string at runtime. The full script in the EC2 Appendix uses `certifi` for Atlas TLS automatically.
 
 ```python
 conn_str = input("Connection string: ")
+client = MongoClient(conn_str, tlsCAFile=certifi.where())
 ```
 
 **Paste at the prompt:**
@@ -84,7 +85,7 @@ python3 migration.py --migrate
 
 ## Lab 3: Hybrid Data Integration Pipeline
 
-All four scripts take the connection string as a **command-line argument** (single-quoted). Replace placeholders in every command.
+All four scripts take the connection string as a **command-line argument** (single-quoted). Replace placeholders in every command. Each script uses `certifi` for Atlas TLS automatically — no extra flags needed on the command line.
 
 ### File 1: `batch_load.py`
 
