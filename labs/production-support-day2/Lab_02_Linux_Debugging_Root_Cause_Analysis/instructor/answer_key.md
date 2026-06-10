@@ -1,6 +1,8 @@
 # Lab 2: Linux System Debugging and Root Cause Analysis — Instructor Answer Key
 
-**Solution workbook:** [lab2_solution.xlsx](lab2_solution.xlsx)
+**Solution workbook (mock):** [lab2_solution.xlsx](lab2_solution.xlsx)  
+**Live AWS setup:** [AWS_EC2_SETUP.md](AWS_EC2_SETUP.md)  
+**Live student guide:** [instructions_live.md](../instructions_live.md)
 
 ---
 
