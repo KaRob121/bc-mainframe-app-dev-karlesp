@@ -15,3 +15,5 @@
 
 **Live:** Your instructor gives you the EC2 IP and `.pem` key.  
 **Mock:** Optional starter: [template/lab2_starter.xlsx](template/lab2_starter.xlsx). Save as `lab2_[yourname].xlsx`.
+
+**Next (live path):** [Lab 3 — SLA Reporting & Postmortem](../Lab_03_SLA_Reporting_Blameless_Postmortem/)
