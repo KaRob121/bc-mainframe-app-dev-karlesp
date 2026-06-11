@@ -3,6 +3,8 @@
 **Estimated time:** 45–50 minutes  
 **Prerequisite:** Lab 2 EC2 instance with `payment-processor` running and fixed
 
+![Lab 3 architecture: EC2 metrics to CloudWatch to Excel for SLA reporting](diagrams/lab3-architecture.png)
+
 ---
 
 ## Start here

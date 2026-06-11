@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 340" width="560" role="img" aria-labelledby="title desc">
   <title id="title">Lab 3 Architecture</title>
   <desc id="desc">EC2 metrics flow to CloudWatch, then export to Excel for SLA reporting and postmortem.</desc>
@@ -44,5 +45,5 @@
   <text x="280" y="268" text-anchor="middle" class="t">Excel (Local)</text>
   <text x="280" y="284" text-anchor="middle" class="b">Export data from CloudWatch</text>
   <text x="280" y="298" text-anchor="middle" class="b">Calculate MTTR, MTBF, Availability</text>
-  <text x="280" y="312" text-anchor="middle" class="b">Create SLA dashboard · Write postmortem &amp; runbook</text>
+  <text x="280" y="312" text-anchor="middle" class="b">Create SLA dashboard and write postmortem and runbook</text>
 </svg>

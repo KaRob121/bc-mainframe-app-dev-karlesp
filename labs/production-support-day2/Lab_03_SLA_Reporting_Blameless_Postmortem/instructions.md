@@ -26,7 +26,7 @@ By the end of this lab, you will be able to:
 
 ## Architecture Overview
 
-<img src="diagrams/lab3-architecture.svg" alt="Lab 3 architecture: EC2 metrics to CloudWatch to Excel for SLA reporting" width="560"/>
+![Lab 3 architecture: EC2 metrics to CloudWatch to Excel for SLA reporting](diagrams/lab3-architecture.png)
 
 ---
 
