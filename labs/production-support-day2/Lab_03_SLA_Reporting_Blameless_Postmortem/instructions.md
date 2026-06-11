@@ -26,34 +26,7 @@ By the end of this lab, you will be able to:
 
 ## Architecture Overview
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                           AWS Cloud                                     │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                    EC2 Instance (Lab 2)                          │   │
-│  │  • payment-processor service                                     │   │
-│  │  • CloudWatch Agent installed                                    │   │
-│  │  • Sends metrics: CPU, Memory, Custom errors                     │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│                                    │                                    │
-│                                    ▼                                    │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                    Amazon CloudWatch                             │   │
-│  │  • Metrics collected                                             │   │
-│  │  • Dashboard created                                             │   │
-│  │  • Alarms configured                                             │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-│                                    │                                    │
-│                                    ▼                                    │
-│  ┌─────────────────────────────────────────────────────────────────┐   │
-│  │                    Excel (Local)                                 │   │
-│  │  • Export data from CloudWatch                                  │   │
-│  │  • Calculate MTTR, MTBF, Availability                           │   │
-│  │  • Create SLA dashboard                                          │   │
-│  │  • Write postmortem & runbook                                    │   │
-│  └─────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+<img src="diagrams/lab3-architecture.svg" alt="Lab 3 architecture: EC2 metrics to CloudWatch to Excel for SLA reporting" width="560"/>
 
 ---
 
