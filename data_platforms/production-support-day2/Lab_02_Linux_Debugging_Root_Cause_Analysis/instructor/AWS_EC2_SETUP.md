@@ -1,83 +1,72 @@
-# Lab 2 — AWS EC2 Live Broken System Setup (Instructor Guide)
+# Lab 2 — AWS EC2 Setup (Instructor)
 
-Launch an **Amazon Linux 2023 EC2 instance** with a pre-built broken `payment-processor` service. Students SSH in, debug with `systemctl`, `journalctl`, and `ss`, then fix the port conflict.
-
-**Estimated instructor setup time:** ~10 minutes  
-**Cost:** `t2.micro` is free tier eligible (~$0.0116/hour beyond free tier)
+**Time:** ~10 minutes  
+**Instance:** Amazon Linux 2023, `t2.micro` (free tier eligible)
 
 ---
 
-## Architecture
+## 1. Launch EC2 instance
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                    AWS Cloud                                    │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │              EC2 Instance (Amazon Linux 2023)            │   │
-│  │                                                          │   │
-│  │  ┌─────────────────────────────────────────────────┐    │   │
-│  │  │  Broken Service: payment-processor.service      │    │   │
-│  │  │  • Fails to start                               │    │   │
-│  │  │  • Port 8080 blocked by rogue process           │    │   │
-│  │  │  • Logs show "address already in use"           │    │   │
-│  │  └─────────────────────────────────────────────────┘    │   │
-│  │                                                          │   │
-│  │  Students: ssh -i key.pem ec2-user@<public-ip>          │   │
-│  └─────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────┘
-```
-
----
-
-## Step 1: Launch EC2 Instance
-
-1. Go to **EC2 Dashboard** → **Instances** → **Launch instance**
-2. Configure:
+1. Open **EC2** → **Instances** → **Launch instance**
+2. Set:
 
 | Field | Value |
 |-------|-------|
 | Name | `Lab2-Broken-System` |
-| AMI | **Amazon Linux 2023 AMI** (free tier eligible) |
-| Instance type | `t2.micro` (free tier) |
-| Key pair | Create or select existing (required for SSH) |
-| Network settings | Allow SSH from your IP (or `0.0.0.0/0` for classroom training) |
+| AMI | **Amazon Linux 2023** |
+| Instance type | `t2.micro` |
+| Key pair | Create new or select existing (download `.pem`) |
+| Security group | Allow **SSH (22)** from your IP |
 
-3. Click **Launch instance**
-4. Wait for instance state **Running** (~2 minutes)
+3. Expand **Advanced details** → **User data**
+4. Paste the full contents of [setup/user_data.sh](../setup/user_data.sh)
+5. Click **Launch instance**
+6. Wait until state is **Running** (~2 minutes)
 
-### Optional: Pre-broken instance with User Data
-
-Paste the contents of [setup/user_data.sh](../setup/user_data.sh) into **Advanced details** → **User data** at launch. Skip Step 3 if using User Data (wait ~2 minutes after boot, then verify in Step 4).
+> If you use User Data, skip Step 3 below. Wait an extra minute after boot for cloud-init to finish.
 
 ---
 
-## Step 2: SSH into the Instance
+## 2. SSH into the instance
 
 ```bash
 chmod 400 your-key.pem
-ssh -i your-key.pem ec2-user@<public-ip-address>
+ssh -i your-key.pem ec2-user@<public-ip>
 ```
 
-Replace `your-key.pem` and `<public-ip-address>` with your key file and instance public IP.
+Replace `your-key.pem` and `<public-ip>` with your key file and the instance public IP from the EC2 console.
 
 ---
 
-## Step 3: Create the Broken System
+## 3. Create the broken system (manual option only)
 
-If you did **not** use User Data, run the setup script on the instance:
+Skip this step if you used **User Data** in Step 1.
+
+**Option A — copy script from your machine:**
 
 ```bash
-curl -sO https://raw.githubusercontent.com/innovationinsoftware/bc-mainframe-app-dev/main/labs/production-support-day2/Lab_02_Linux_Debugging_Root_Cause_Analysis/setup/create_broken_system.sh
-# Or copy setup/create_broken_system.sh via scp, then:
+scp -i your-key.pem setup/create_broken_system.sh ec2-user@<public-ip>:~/
+ssh -i your-key.pem ec2-user@<public-ip>
 chmod +x create_broken_system.sh
 ./create_broken_system.sh
 ```
 
-**Local copy:** [setup/create_broken_system.sh](../setup/create_broken_system.sh)
+**Option B — paste script on the instance:**
+
+```bash
+# On the EC2 instance after SSH login:
+curl -sO https://raw.githubusercontent.com/innovationinsoftware/bc-mainframe-app-dev/main/labs/production-support-day2/Lab_02_Linux_Debugging_Root_Cause_Analysis/setup/create_broken_system.sh
+chmod +x create_broken_system.sh
+./create_broken_system.sh
+```
+
+You should see: `=== Broken System Created ===`
 
 ---
 
-## Step 4: Verify the System is Broken
+## 4. Verify the system is broken
+
+Run on the instance:
 
 ```bash
 systemctl status payment-processor
@@ -87,65 +76,64 @@ sudo journalctl -u payment-processor -n 20
 ```
 
 **Expected:**
-- `systemctl status` → `inactive (dead)` or `failed`
-- `ss -tulpn` → `python3` listening on `:8080`
-- `journalctl` → `Address already in use` or similar bind error
+
+| Check | Expected result |
+|-------|-----------------|
+| `systemctl status` | `failed` or `inactive (dead)` |
+| `sudo ss -tulpn` | `python3` listening on `:8080` with a PID |
+| `pgrep` | `/opt/rogue-process.py` |
+| `journalctl` | `Address already in use` on port 8080 |
 
 ---
 
-## Step 5: Student Instructions
+## 5. Give students
 
-Point students to **[instructions_live.md](../instructions_live.md)** for live SSH debugging steps.
+Provide each student or pair:
 
-After students complete the live fix, they can document findings in the Excel mock lab ([instructions.md](../instructions.md)) or in their RCA workbook.
+1. EC2 **public IP**
+2. **`.pem`** key file
+3. Link to [instructions_live.md](../instructions_live.md)
+
+Students SSH in and follow Steps 2–7 in that guide.
 
 ---
 
-## Step 6: Reset Between Sessions
+## 6. Reset between students
 
-Run on the instance between students:
+Copy reset script to the instance (once):
+
+```bash
+scp -i your-key.pem setup/reset_lab2.sh ec2-user@<public-ip>:~/
+```
+
+Between each student, SSH in and run:
 
 ```bash
 chmod +x reset_lab2.sh
 ./reset_lab2.sh
 ```
 
-**Local copy:** [setup/reset_lab2.sh](../setup/reset_lab2.sh)
+Re-verify with Step 4 before the next student starts.
 
 ---
 
-## Step 7: Terraform (Optional)
+## 7. Test from your machine (optional)
 
-For repeatable environments:
+Automated end-to-end test — launches instance, verifies broken state, runs fix, terminates:
 
 ```bash
-cd setup/terraform
-terraform init
-terraform apply -var="key_name=your-key-pair-name"
+python setup/test_aws_lab2.py --terminate
 ```
 
-Outputs the instance public IP for SSH.
+Requires AWS credentials. Default region: `us-west-1` (edit script if needed).
 
 ---
 
-## Summary
-
-| Step | Action | Time |
-|------|--------|------|
-| 1 | Launch EC2 (Amazon Linux 2023, t2.micro) | 2 min |
-| 2 | SSH into instance | 1 min |
-| 3 | Run broken system script (or use User Data) | 2 min |
-| 4 | Verify system is broken | 1 min |
-| 5 | Students debug and fix | 15–20 min |
-| 6 | Reset for next session | 1 min |
-
----
-
-## Setup Scripts
+## Setup scripts
 
 | Script | Purpose |
 |--------|---------|
-| [setup/create_broken_system.sh](../setup/create_broken_system.sh) | Manual broken state after SSH |
-| [setup/user_data.sh](../setup/user_data.sh) | EC2 User Data — auto-broken at launch |
+| [setup/user_data.sh](../setup/user_data.sh) | Paste into EC2 User Data at launch |
+| [setup/create_broken_system.sh](../setup/create_broken_system.sh) | Manual setup after SSH |
 | [setup/reset_lab2.sh](../setup/reset_lab2.sh) | Reset between students |
-| [setup/terraform/main.tf](../setup/terraform/main.tf) | Optional IaC deployment |
+| [setup/test_aws_lab2.py](../setup/test_aws_lab2.py) | Automated test |
