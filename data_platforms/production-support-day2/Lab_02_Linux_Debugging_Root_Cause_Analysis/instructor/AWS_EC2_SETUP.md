@@ -125,7 +125,7 @@ Automated end-to-end test — launches instance, verifies broken state, runs fix
 python setup/test_aws_lab2.py --terminate
 ```
 
-Requires AWS credentials. Default region: `us-west-1` (edit script if needed).
+Requires AWS credentials. Default region: `ca-central-1` (Canada Central).
 
 ---
 
