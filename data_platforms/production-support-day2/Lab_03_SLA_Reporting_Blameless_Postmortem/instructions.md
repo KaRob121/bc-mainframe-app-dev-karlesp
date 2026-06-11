@@ -428,6 +428,25 @@ On the **SLA Calculations** sheet, enter your CloudWatch data in the metrics tab
 - **Response SLA compliance %** — `(readings ≤ 150 ms) ÷ (readings with data) × 100`
 - **Resolution SLA compliance %** — estimate from incident handling (sample: 92%)
 
+**Response SLA compliance — important:**
+
+Only count rows where **ServiceHealth = 1** and **ResponseTimeMs has a number** (not **—**). Downtime rows are **excluded from both** the numerator and denominator — you cannot measure response time when the service is down.
+
+Using the sample data above:
+
+| Row | Counts for Response SLA? | Why |
+|-----|--------------------------|-----|
+| 09:00 (95 ms) | Yes | ≤ 150 ms ✓ |
+| 09:05 (102 ms) | Yes | ≤ 150 ms ✓ |
+| 09:10 (down) | **No** | No response time data |
+| 09:15 (down) | **No** | No response time data |
+| 09:20 (180 ms) | Yes | > 150 ms ✗ |
+| 09:25 (88 ms) | Yes | ≤ 150 ms ✓ |
+
+**3 ÷ 4 × 100 = 75%** (3 compliant readings out of 4 rows with response time data)
+
+> If your result is **over 100%**, you likely counted downtime rows in the numerator. Those rows belong only in the downtime calculations, not in response SLA compliance.
+
 ---
 
 ## Step 10 — Calculate MTTR, MTBF, and Availability

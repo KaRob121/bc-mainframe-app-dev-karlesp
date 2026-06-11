@@ -23,7 +23,7 @@ Enter **one row per timestamp** in the metrics table. Column C is each reading's
 |-------------|--------|
 | Downtime intervals | 2 (× 5 min = **10 minutes**) |
 | Response times > 150 ms | 09:20 → **180 ms** (1 breach) |
-| Response SLA compliance | 3 of 4 readings ≤ 150 ms → **75%** |
+| Response SLA compliance | 3 of 4 readings ≤ 150 ms → **75%** (exclude downtime rows — only count rows where ServiceHealth = 1 and ResponseTimeMs has a value) |
 | Resolution SLA compliance | **92%** (sample) |
 | Overall SLA | **83.5%** (average of response + resolution) |
 | MTTR | 10 ÷ 1 = **10 minutes** |
@@ -102,3 +102,4 @@ Students should reference Lab 2 commands:
 | Forgetting `cronie` | `sudo yum install -y cronie` before crontab |
 | MTTR uses uptime instead of downtime | MTTR = downtime ÷ incidents |
 | Postmortem blames a person | Reinforce blameless culture — focus on systems and process |
+| Response SLA > 100% | Downtime rows counted in numerator — exclude rows where ServiceHealth = 0; only count rows with ResponseTimeMs data (3 ÷ 4 = 75%) |
