@@ -8,14 +8,16 @@
 
 ## Expected SLA Calculations (sample data)
 
-| Timestamp | ServiceHealth | ResponseTimeMs |
-|-----------|---------------|----------------|
-| 09:00 | 1 | 95 |
-| 09:05 | 1 | 102 |
-| 09:10 | 0 | — |
-| 09:15 | 0 | — |
-| 09:20 | 1 | 180 |
-| 09:25 | 1 | 88 |
+Enter **one row per timestamp** in the metrics table. Column C is each reading's response time (not an average). Column D is **Yes** / **No** / **—** per row.
+
+| Timestamp | ServiceHealth | ResponseTimeMs | Exceeds 150ms SLA? |
+|-----------|---------------|----------------|--------------------|
+| 09:00 | 1 | 95 | No |
+| 09:05 | 1 | 102 | No |
+| 09:10 | 0 | — | — |
+| 09:15 | 0 | — | — |
+| 09:20 | 1 | 180 | Yes |
+| 09:25 | 1 | 88 | No |
 
 | Calculation | Result |
 |-------------|--------|

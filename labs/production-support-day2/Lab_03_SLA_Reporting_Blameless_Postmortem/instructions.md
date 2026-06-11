@@ -395,16 +395,25 @@ aws cloudwatch get-metric-statistics \
 
 ## Step 9 — Calculate SLA Metrics
 
-On the **SLA Calculations** sheet, enter your CloudWatch data in the metrics table (or use this sample if metrics are sparse):
+On the **SLA Calculations** sheet, enter your CloudWatch data in the metrics table — **one row per timestamp** (every 5 minutes). Do not enter averages in the table; averages and compliance percentages go in the **summary section at the bottom**.
 
-| Timestamp | ServiceHealth (1=up, 0=down) | ResponseTimeMs |
-|-----------|------------------------------|----------------|
-| 09:00 | 1 | 95 |
-| 09:05 | 1 | 102 |
-| 09:10 | 0 | — |
-| 09:15 | 0 | — |
-| 09:20 | 1 | 180 |
-| 09:25 | 1 | 88 |
+| Column | Header | What to enter |
+|--------|--------|---------------|
+| **A** | Timestamp | Time of each reading (e.g. `09:00`, `09:05`) |
+| **B** | ServiceHealth | `1` = service up, `0` = service down |
+| **C** | ResponseTimeMs | That row's response time in ms from CloudWatch — use **—** when ServiceHealth = 0 |
+| **D** | Exceeds 150ms SLA? | **Yes** if ResponseTimeMs > 150, **No** if ≤ 150, **—** when service is down |
+
+**Sample data** (use if your CloudWatch export is sparse):
+
+| Timestamp | ServiceHealth | ResponseTimeMs | Exceeds 150ms SLA? |
+|-----------|---------------|----------------|--------------------|
+| 09:00 | 1 | 95 | No |
+| 09:05 | 1 | 102 | No |
+| 09:10 | 0 | — | — |
+| 09:15 | 0 | — | — |
+| 09:20 | 1 | 180 | Yes |
+| 09:25 | 1 | 88 | No |
 
 **SLA targets:**
 
