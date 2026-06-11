@@ -25,10 +25,13 @@ Custom metrics (Step 4) require the instance to call `cloudwatch:PutMetricData`.
 1. **IAM** → **Roles** → **Create role**
 2. **Trusted entity:** AWS service → **EC2**
 3. **Permissions** — attach:
-   - `CloudWatchAgentServerPolicy`
-   - `CloudWatchAgentAdminPolicy`
+   - `CloudWatchAgentServerPolicy` (CloudWatch agent in Step 3)
+   - `CloudWatchAgentAdminPolicy` (CloudWatch agent in Step 3)
 4. **Role name:** `Lab3-EC2-CloudWatch-Role`
 5. Create role
+6. Open the new role → **Add permissions** → **Create inline policy** → **JSON** → paste [setup/lab3_put_metric_data_policy.json](../setup/lab3_put_metric_data_policy.json) → name it `Lab3-PutMetricData` → create
+
+> **Important:** The CloudWatch agent policies alone do **not** allow `PaymentProcessor` custom metrics (`send_metrics.sh`). The inline policy above grants `cloudwatch:PutMetricData` for Step 4.
 
 ### Create instance profile and attach to EC2
 
@@ -126,7 +129,8 @@ scp -i your-key.pem setup/send_metrics.sh ec2-user@<public-ip>:/tmp/
 
 | Problem | Fix |
 |---------|-----|
-| `AccessDenied` on `put-metric-data` | IAM role not attached or not propagated — wait 2 min, retry |
+| `Unable to locate credentials` / `aws login` | **No IAM role on the EC2 instance.** Attach `Lab3-EC2-CloudWatch-Role` (Section 1), wait 2 min, then run `aws sts get-caller-identity --region ca-central-1` on the instance — it must return an ARN, not an error |
+| `AccessDenied` on `put-metric-data` | Role attached but missing `Lab3-PutMetricData` inline policy — add policy from [setup/lab3_put_metric_data_policy.json](../setup/lab3_put_metric_data_policy.json), wait 2 min, retry |
 | `crontab: command not found` | Run `sudo yum install -y cronie` |
 | Custom metrics not in console | Wait 5 min; run `/opt/send_metrics.sh` manually |
 | Dashboard shows "No data" | Confirm region is `ca-central-1`; metrics exist under PaymentProcessor |

@@ -162,7 +162,20 @@ Expect: `active (running)`
 
 ## Step 4 — Create Custom Metrics for payment-processor
 
-The EC2 instance needs permission to publish metrics. Your instructor attaches an IAM role before class (see instructor setup guide). If `aws cloudwatch put-metric-data` fails with **AccessDenied**, ask your instructor.
+The EC2 instance needs an **IAM role** so `aws` can publish metrics without access keys. Your instructor attaches `Lab3-EC2-CloudWatch-Role` before class (see instructor setup guide).
+
+**Before continuing — verify credentials on the EC2 instance:**
+
+```bash
+aws sts get-caller-identity --region ca-central-1
+```
+
+Expect JSON with an `Arn` like `arn:aws:sts::...:assumed-role/Lab3-EC2-CloudWatch-Role/...`
+
+| Error | What to do |
+|-------|------------|
+| `Unable to locate credentials` / `aws login` | IAM role is **not attached** to this EC2 instance — ask your instructor to complete [instructor/AWS_LAB3_SETUP.md](instructor/AWS_LAB3_SETUP.md) Section 1, wait 2 minutes, then retry |
+| `AccessDenied` on `put-metric-data` | Role is attached but missing custom-metrics permission — ask instructor to add `Lab3-PutMetricData` policy |
 
 Install cron support (required on Amazon Linux 2023):
 
