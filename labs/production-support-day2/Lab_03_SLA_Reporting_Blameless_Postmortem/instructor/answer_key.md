@@ -22,9 +22,27 @@
 | Downtime intervals | 2 (× 5 min = **10 minutes**) |
 | Response times > 150 ms | 09:20 → **180 ms** (1 breach) |
 | Response SLA compliance | 3 of 4 readings ≤ 150 ms → **75%** |
+| Resolution SLA compliance | **92%** (sample) |
+| Overall SLA | **83.5%** (average of response + resolution) |
 | MTTR | 10 ÷ 1 = **10 minutes** |
 | MTBF | 50 ÷ 1 = **50 minutes** |
 | Availability | (60 − 10) ÷ 60 × 100 = **83.33%** |
+
+---
+
+## Workbook sheet checklist
+
+| Sheet | Key content to verify |
+|-------|----------------------|
+| Raw Metrics | 6 sample rows or student's CloudWatch export |
+| SLA Calculations | Metrics table + summary rows filled |
+| MTTR MTBF | All 7 metrics with values |
+| Availability | 83.33% and 99.9% check = Yes |
+| KPI Dashboard | All sections filled (no blanks left) |
+| Postmortem | 5 Whys, root cause, action items |
+| Runbook | 8 steps + escalation contacts |
+
+See [lab3_solution.xlsx](lab3_solution.xlsx) for the completed reference.
 
 ---
 

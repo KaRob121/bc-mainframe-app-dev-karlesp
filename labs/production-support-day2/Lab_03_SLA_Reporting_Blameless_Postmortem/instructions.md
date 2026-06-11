@@ -7,7 +7,7 @@
 
 **AWS region:** Canada (Central) — `ca-central-1`
 
-> **Optional:** Copy [template/lab3_starter.xlsx](template/lab3_starter.xlsx) instead of creating sheets from scratch in Step 8.
+> **Recommended:** Copy [template/lab3_starter.xlsx](template/lab3_starter.xlsx) to `lab3_[yourname].xlsx` before Step 8. The starter includes all seven sheets with labels and fill-in sections.
 
 ---
 
@@ -338,25 +338,27 @@ aws cloudwatch get-metric-statistics \
 
 ---
 
-## Step 8 — Create Excel Workbook
+## Step 8 — Open Your Excel Workbook
 
-Open Excel and create `lab3_sla_metrics.xlsx` with these sheets:
+1. Copy [template/lab3_starter.xlsx](template/lab3_starter.xlsx) to `lab3_[yourname].xlsx`.
+2. Open the file in Excel or Google Sheets.
+3. Confirm these seven sheets exist:
 
-| Sheet name | Purpose |
-|------------|---------|
-| Raw Metrics | Paste exported CloudWatch data |
-| SLA Calculations | Response time and resolution compliance |
-| MTTR MTBF | Reliability metrics |
-| Availability | Uptime percentage |
-| KPI Dashboard | Summary dashboard |
-| Postmortem | Blameless postmortem (Step 12) |
-| Runbook | SOP (Step 13) |
+| Sheet | What you will complete |
+|-------|------------------------|
+| Raw Metrics | Paste CloudWatch export (Step 7) |
+| SLA Calculations | Metrics table + compliance summary |
+| MTTR MTBF | Reliability formulas and values |
+| Availability | Uptime and 99.9% SLA check |
+| KPI Dashboard | Weekly summary |
+| Postmortem | Blameless incident review |
+| Runbook | Recovery SOP |
 
 ---
 
 ## Step 9 — Calculate SLA Metrics
 
-In the **SLA Calculations** sheet, build a table from your CloudWatch data (or use this sample if metrics are sparse):
+On the **SLA Calculations** sheet, enter your CloudWatch data in the metrics table (or use this sample if metrics are sparse):
 
 | Timestamp | ServiceHealth (1=up, 0=down) | ResponseTimeMs |
 |-----------|------------------------------|----------------|
@@ -373,17 +375,18 @@ In the **SLA Calculations** sheet, build a table from your CloudWatch data (or u
 - P1 resolution: 1 hour
 - Response time threshold: 150 ms
 
-**Calculate:**
+**Fill in the summary section** at the bottom of the sheet:
 
-- **Downtime minutes** — count rows where ServiceHealth = 0, multiply by 5 (interval length)
-- **Response SLA compliance** — `(readings ≤ 150 ms) ÷ (total readings with data) × 100`
-- **Any response times over 150 ms?** — note which timestamps
+- **Downtime intervals** — count rows where ServiceHealth = 0
+- **Total downtime (minutes)** — intervals × 5
+- **Response SLA compliance %** — `(readings ≤ 150 ms) ÷ (readings with data) × 100`
+- **Resolution SLA compliance %** — estimate from incident handling (sample: 92%)
 
 ---
 
 ## Step 10 — Calculate MTTR, MTBF, and Availability
 
-In the **MTTR MTBF** sheet:
+On the **MTTR MTBF** sheet, enter values in the **Value** column using these formulas:
 
 | Metric | Formula |
 |--------|---------|
@@ -403,140 +406,50 @@ In the **MTTR MTBF** sheet:
 | **MTBF** | 50 ÷ 1 = **50 minutes** |
 | **Availability** | (60 − 10) ÷ 60 × 100 = **83.33%** |
 
-Record your values from your own data in the **Availability** sheet.
+Copy **Availability %** to the **Availability** sheet. Check whether the incident meets the 99.9% monthly SLA (max 43 minutes downtime).
 
 ---
 
-## Step 11 — Create KPI Dashboard in Excel
+## Step 11 — Complete KPI Dashboard
 
-In the **KPI Dashboard** sheet, fill in:
+On the **KPI Dashboard** sheet, fill in every blank using your calculations from Steps 9–10:
 
-```
-WEEKLY KPI DASHBOARD
-Date: _______________
-
-SERVICE HEALTH
-Service Availability:        _______ %
-Total Downtime (min):        _______
-Number of Incidents:         _______
-
-SLA COMPLIANCE
-Response SLA:                _______ %
-Resolution SLA:              _______ %
-Overall SLA:                 _______ %
-
-RELIABILITY METRICS
-MTTR (minutes):              _______
-MTBF (minutes):              _______
-
-TOP ALERTS
-1. Service Down:             _______ times
-2. High Response Time:       _______ times
-
-ACTION ITEMS
-1.
-2.
-3.
-```
+- Service health (availability, downtime, incident count)
+- SLA compliance (response, resolution, overall)
+- Reliability (MTTR, MTBF)
+- Top alerts (from CloudWatch alarms)
+- Three action items for follow-up
 
 ---
 
 ## Step 12 — Write Blameless Postmortem
 
-In the **Postmortem** sheet, document the Lab 2 incident using your CloudWatch timeline:
+On the **Postmortem** sheet, complete every section using your CloudWatch timeline and Lab 2 root cause:
 
-```
-BLAMELESS POSTMORTEM — Incident ID: INC-AWS-001
-
-DATE:         _______________
-SERVICE:      payment-processor
-SEVERITY:     P1
-SLA MET?      Yes / No
-
-WHAT HAPPENED?
-[Describe based on CloudWatch ServiceHealth and Lab 2 root cause]
-
-WHEN?
-Start time:   _______________
-End time:     _______________
-Duration:     _______________ minutes
-
-5 WHYS
-1. Why did the service fail? →
-2. Why did that happen? →
-3. Why did that happen? →
-4. Why did that happen? →
-5. Why did that happen? →
-Root cause:
-
-WHAT WENT WELL?
-•
-
-WHAT WENT WRONG?
-•
-
-ACTION ITEMS
-| Action | Owner | Due Date |
-|--------|-------|----------|
-
-LESSONS LEARNED
-•
-```
+- Incident details (INC-AWS-001, P1, SLA met or not)
+- What happened and when (start, end, duration)
+- 5 Whys down to root cause
+- What went well / what went wrong
+- Action items with owner and due date
+- Lessons learned
 
 ---
 
-## Step 13 — Create Runbook (SOP)
+## Step 13 — Complete Runbook (SOP)
 
-In the **Runbook** sheet:
+On the **Runbook** sheet, review the eight recovery steps (acknowledge → verify → close). Confirm commands match your Lab 2 fix flow:
 
-```
-RUNBOOK / SOP — Document ID: RB-AWS-001
-TITLE: payment-processor Service Recovery
+- `sudo ss -tulpn | grep 8080` and `pgrep -af rogue-process.py`
+- `sudo kill -9 <PID>` (not `pkill -f`)
+- `sudo systemctl reset-failed` before restart
 
-TRIGGER
-• CloudWatch alarm: PaymentProcessor-ServiceDown
-• User reports: transactions failing
-
-STEP 1 — ACKNOWLEDGE
-• Acknowledge alarm; note incident time
-• Check Lab3-SLA-Dashboard for impact duration
-
-STEP 2 — CHECK SERVICE STATUS
-  systemctl status payment-processor
-
-STEP 3 — CHECK LOGS
-  sudo journalctl -u payment-processor -n 50
-  Look for: "address already in use" or port 8080
-
-STEP 4 — CHECK PORT CONFLICT
-  sudo ss -tulpn | grep 8080
-  pgrep -af rogue-process.py
-
-STEP 5 — KILL CONFLICTING PROCESS
-  sudo kill -9 <PID>
-
-STEP 6 — RESTART SERVICE
-  sudo systemctl reset-failed payment-processor
-  sudo systemctl restart payment-processor
-
-STEP 7 — VERIFY
-  systemctl is-active payment-processor
-  curl -s -o /dev/null -w "%{http_code}" http://localhost:8080
-
-STEP 8 — CLOSE INCIDENT
-• Document root cause; update resolution time; close ticket
-
-ESCALATION
-L2 Support: _______________
-L3 Support: _______________
-On-call Manager: _______________
-```
+Add escalation contacts at the bottom.
 
 ---
 
 ## Step 14 — Save Your Workbook
 
-Save as `lab3_[yourname].xlsx`. Confirm all seven sheets are complete:
+Save `lab3_[yourname].xlsx`. Confirm all seven sheets are complete:
 
 - Raw Metrics
 - SLA Calculations
