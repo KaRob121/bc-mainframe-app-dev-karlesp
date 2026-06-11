@@ -162,6 +162,15 @@ Expect: `active (running)`
 
 ## Step 4 — Create Custom Metrics for payment-processor
 
+The script in this step publishes two **custom CloudWatch metrics** under the namespace **`PaymentProcessor`** (this is not a built-in AWS service):
+
+| Metric | Meaning |
+|--------|---------|
+| `ServiceHealth` | `1` = `payment-processor` service is up, `0` = down |
+| `ResponseTimeMs` | Simulated API response time |
+
+> **Note:** The Linux service from Lab 2 is `payment-processor` (hyphen). The CloudWatch namespace is `PaymentProcessor` (PascalCase, no hyphen).
+
 The EC2 instance needs an **IAM role** so `aws` can publish metrics without access keys. Your instructor attaches `Lab3-EC2-CloudWatch-Role` before class (see instructor setup guide).
 
 **Before continuing — verify credentials on the EC2 instance:**
@@ -261,22 +270,36 @@ sudo systemctl start payment-processor
 
 ## Step 5 — Create a CloudWatch Dashboard
 
-1. In the AWS Console, open **CloudWatch** → **Dashboards** → **Create dashboard**.
-2. Name: `Lab3-SLA-Dashboard`
-3. Click **Add widget** and add:
+**Prerequisite:** Step 4 must be complete — you should have seen `Metrics sent at ... status=1 response_ms=...` when you ran `/opt/send_metrics.sh`.
 
-| Widget type | Metric | Purpose |
-|-------------|--------|---------|
-| Line | **EC2** → **CPUUtilization** (your instance) | Track server load |
-| Line | **EC2** → **StatusCheckFailed** (your instance) | Track instance health |
-| Line | **PaymentProcessor** → **ServiceHealth** | Service up (1) or down (0) |
-| Line | **PaymentProcessor** → **ResponseTimeMs** | API response time |
-| Number | **PaymentProcessor** → **ServiceHealth** (Average) | Current service status |
-| Number | **EC2** → **CPUUtilization** (Average) | Average CPU load |
+**Important:** `PaymentProcessor` is a **custom metric namespace** created by the Step 4 script. It does **not** appear under EC2 or as a built-in AWS service. You find it under **CloudWatch** → **Metrics** → **All metrics** → **Custom namespaces** → **PaymentProcessor**.
 
-4. Save the dashboard.
+1. In the AWS Console, confirm the region is **Canada (Central) — `ca-central-1`**.
+2. Open **CloudWatch** → **Dashboards** → **Create dashboard**.
+3. Name: `Lab3-SLA-Dashboard`
+4. Click **Add widget** and add each metric below. For each widget, click **Browse** (or **Add metrics**), then navigate as described.
 
-> Custom metrics may take a few minutes to appear. Refresh the dashboard after Step 4.
+### EC2 metrics (built-in)
+
+| Widget type | How to find it | Purpose |
+|-------------|----------------|---------|
+| Line | **EC2** → **Per-Instance Metrics** → **CPUUtilization** → select your instance | Track server load |
+| Line | **EC2** → **Per-Instance Metrics** → **StatusCheckFailed** → select your instance | Track instance health |
+| Number | **EC2** → **Per-Instance Metrics** → **CPUUtilization** (Average) → select your instance | Average CPU load |
+
+### PaymentProcessor metrics (custom — from Step 4)
+
+| Widget type | How to find it | Purpose |
+|-------------|----------------|---------|
+| Line | **All metrics** → **Custom namespaces** → **PaymentProcessor** → **ServiceHealth** → select your **InstanceId** | Service up (1) or down (0) |
+| Line | **All metrics** → **Custom namespaces** → **PaymentProcessor** → **ResponseTimeMs** → select your **InstanceId** | API response time |
+| Number | **All metrics** → **Custom namespaces** → **PaymentProcessor** → **ServiceHealth** (Average) → select your **InstanceId** | Current service status |
+
+5. Save each widget, then save the dashboard.
+
+> Custom metrics may take 2–5 minutes to appear after Step 4. If you don't see **PaymentProcessor**, run `/opt/send_metrics.sh` again on the EC2 instance and refresh.
+
+**Verify metrics exist before building the dashboard:** **CloudWatch** → **Metrics** → **All metrics** → **PaymentProcessor**. If this folder is empty, return to Step 4.
 
 ---
 
