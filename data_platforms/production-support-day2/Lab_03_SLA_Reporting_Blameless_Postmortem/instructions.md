@@ -9,6 +9,22 @@
 
 > **Recommended:** Copy [template/lab3_starter.xlsx](template/lab3_starter.xlsx) to `lab3_[yourname].xlsx` before Step 8. The starter includes all seven sheets with labels and fill-in sections.
 
+### Lab file locations
+
+All paths below are relative to the **Lab 3 folder** (`Lab_03_SLA_Reporting_Blameless_Postmortem/`). Clone or download the course repo, then open a terminal in that folder before running `scp` commands.
+
+| File | Location in repo | When you need it |
+|------|------------------|------------------|
+| Lab instructions | `instructions.md` | This file — Steps 1–14 |
+| CloudWatch agent config | `setup/cloudwatch_agent_config.json` | Step 3, Option A |
+| Custom metrics script | `setup/send_metrics.sh` | Step 4, Option A |
+| Starter Excel workbook | `template/lab3_starter.xlsx` | Step 8 (copy to your working file first) |
+| Architecture diagram | `diagrams/lab3-architecture.png` | Reference (also shown above) |
+| EC2 SSH key (`.pem`) | **From your instructor** (same key as Lab 2) | Steps 2, 3, 4 — not in the repo |
+| Your working workbook | `lab3_[yourname].xlsx` | **You create this** — copy of the starter, saved locally |
+
+**`scp` tip:** `cd` into `Lab_03_SLA_Reporting_Blameless_Postmortem/` in your cloned repo before running `scp`, so paths like `setup/cloudwatch_agent_config.json` resolve correctly. Replace `/path/to/your-key.pem` with your Lab 2 `.pem` file (e.g. `~/Downloads/lab2-key.pem`).
+
 ---
 
 ## Lab Objectives
@@ -41,6 +57,8 @@ By the end of this lab, you will be able to:
 ---
 
 ## Step 2 — SSH into Your EC2 Instance
+
+Use the **`.pem` key file from Lab 2`** (provided by your instructor). It is not stored in the course repo — keep it wherever you saved it when you downloaded it (e.g. `~/Downloads/your-key.pem`).
 
 **Mac/Linux:**
 
@@ -77,9 +95,14 @@ sudo yum install -y amazon-cloudwatch-agent
 
 **Option A — copy the config file from your machine (recommended):**
 
+**File:** `setup/cloudwatch_agent_config.json` (in the Lab 3 folder — see [Lab file locations](#lab-file-locations))
+
 ```bash
-# Run on your local machine (not on EC2):
-scp -i your-key.pem setup/cloudwatch_agent_config.json ec2-user@<public-ip>:/tmp/
+# Run on your local machine (not on EC2).
+# cd to Lab_03_SLA_Reporting_Blameless_Postmortem/ in your clone first:
+cd /path/to/Lab_03_SLA_Reporting_Blameless_Postmortem
+
+scp -i /path/to/your-key.pem setup/cloudwatch_agent_config.json ec2-user@<public-ip>:/tmp/
 ```
 
 Then on the EC2 instance:
@@ -149,9 +172,14 @@ sudo yum install -y cronie
 
 **Option A — copy the script from your machine (recommended):**
 
+**File:** `setup/send_metrics.sh` (in the Lab 3 folder — see [Lab file locations](#lab-file-locations))
+
 ```bash
-# On your local machine:
-scp -i your-key.pem setup/send_metrics.sh ec2-user@<public-ip>:/tmp/
+# On your local machine.
+# cd to Lab_03_SLA_Reporting_Blameless_Postmortem/ in your clone first:
+cd /path/to/Lab_03_SLA_Reporting_Blameless_Postmortem
+
+scp -i /path/to/your-key.pem setup/send_metrics.sh ec2-user@<public-ip>:/tmp/
 ```
 
 On the instance:
@@ -313,8 +341,8 @@ aws cloudwatch get-metric-statistics \
 
 ## Step 8 — Open Your Excel Workbook
 
-1. Copy [template/lab3_starter.xlsx](template/lab3_starter.xlsx) to `lab3_[yourname].xlsx`.
-2. Open the file in Excel or Google Sheets.
+1. Copy the starter workbook from `template/lab3_starter.xlsx` (in the Lab 3 folder) to `lab3_[yourname].xlsx` in a folder of your choice (Desktop, Documents, etc.).
+2. Open `lab3_[yourname].xlsx` in Excel or Google Sheets.
 3. Confirm these seven sheets exist:
 
 | Sheet | What you will complete |
