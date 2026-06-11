@@ -13,7 +13,7 @@ from pathlib import Path
 import boto3
 from botocore.exceptions import ClientError
 
-REGION = "ca-central-1"
+REGION = "us-east-1"
 LAB_TAG = "Lab2-Broken-System-Test"
 ROOT = Path(__file__).resolve().parent
 USER_DATA = (ROOT / "user_data.sh").read_text(encoding="utf-8")

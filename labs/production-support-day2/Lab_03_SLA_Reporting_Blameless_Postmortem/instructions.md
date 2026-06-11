@@ -5,7 +5,7 @@
 
 **Prerequisite:** Lab 2 EC2 instance (`payment-processor` service) is running and fixed.
 
-**AWS region:** Canada (Central) — `ca-central-1`
+**AWS region:** US East (N. Virginia) — `us-east-1`
 
 > **Recommended:** Copy [template/lab3_starter.xlsx](template/lab3_starter.xlsx) to `lab3_[yourname].xlsx` before Step 8. The starter includes all seven sheets with labels and fill-in sections.
 
@@ -48,7 +48,7 @@ By the end of this lab, you will be able to:
 
 ## Step 1 — Verify Your Lab 2 EC2 Instance is Running
 
-1. Sign in to the **AWS Console** and set the region to **Canada (Central)**.
+1. Sign in to the **AWS Console** and set the region to **US East (N. Virginia)**.
 2. Go to **EC2** → **Instances**.
 3. Locate your Lab 2 instance (e.g. `Lab2-Broken-System`).
 4. Verify **Instance state** = `Running`.
@@ -176,7 +176,7 @@ The EC2 instance needs an **IAM role** so `aws` can publish metrics without acce
 **Before continuing — verify credentials on the EC2 instance:**
 
 ```bash
-aws sts get-caller-identity --region ca-central-1
+aws sts get-caller-identity --region us-east-1
 ```
 
 Expect JSON with an `Arn` like `arn:aws:sts::...:assumed-role/Lab3-EC2-CloudWatch-Role/...`
@@ -232,7 +232,7 @@ aws cloudwatch put-metric-data \
   --value "$SERVICE_STATUS" \
   --unit Count \
   --dimensions InstanceId="$INSTANCE_ID" \
-  --region ca-central-1
+  --region us-east-1
 
 RANDOM_TIME=$((RANDOM % 200 + 50))
 aws cloudwatch put-metric-data \
@@ -241,7 +241,7 @@ aws cloudwatch put-metric-data \
   --value "$RANDOM_TIME" \
   --unit Milliseconds \
   --dimensions InstanceId="$INSTANCE_ID" \
-  --region ca-central-1
+  --region us-east-1
 
 echo "Metrics sent at $(date) status=$SERVICE_STATUS response_ms=$RANDOM_TIME"
 EOF
@@ -274,7 +274,7 @@ sudo systemctl start payment-processor
 
 **Important:** `PaymentProcessor` is a **custom metric namespace** created by the Step 4 script. It does **not** appear under EC2 or as a built-in AWS service. You find it under **CloudWatch** → **Metrics** → **All metrics** → **Custom namespaces** → **PaymentProcessor**.
 
-1. In the AWS Console, confirm the region is **Canada (Central) — `ca-central-1`**.
+1. In the AWS Console, confirm the region is **US East (N. Virginia) — `us-east-1`**.
 2. Open **CloudWatch** → **Dashboards** → **Create dashboard**.
 3. Name: `Lab3-SLA-Dashboard`
 4. Click **Add widget** and add each metric below. For each widget, click **Browse** (or **Add metrics**), then navigate as described.
@@ -311,7 +311,7 @@ Run from your **SSH session** (region must match your console):
 
 ```bash
 aws cloudwatch put-metric-alarm \
-  --region ca-central-1 \
+  --region us-east-1 \
   --alarm-name "PaymentProcessor-ServiceDown" \
   --alarm-description "Alert when payment-processor service stops" \
   --metric-name "ServiceHealth" \
@@ -328,7 +328,7 @@ aws cloudwatch put-metric-alarm \
 
 ```bash
 aws cloudwatch put-metric-alarm \
-  --region ca-central-1 \
+  --region us-east-1 \
   --alarm-name "PaymentProcessor-HighResponseTime" \
   --alarm-description "Response time exceeding 200ms (SLA risk)" \
   --metric-name "ResponseTimeMs" \
@@ -363,7 +363,7 @@ TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-m
 INSTANCE_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/instance-id)
 
 aws cloudwatch get-metric-statistics \
-  --region ca-central-1 \
+  --region us-east-1 \
   --namespace "PaymentProcessor" \
   --metric-name "ServiceHealth" \
   --dimensions Name=InstanceId,Value=$INSTANCE_ID \

@@ -94,7 +94,7 @@ Students should reference Lab 2 commands:
 
 | Mistake | Correction |
 |---------|------------|
-| Wrong AWS region | Must use `ca-central-1` in console and CLI |
+| Wrong AWS region | Must use `us-east-1` in console and CLI |
 | Missing IAM role | Attach `Lab3-EC2-CloudWatch-Role` before Step 4 |
 | Using `pkill -f rogue-process` | Use `kill -9 <PID>` from `pgrep` |
 | Forgetting `cronie` | `sudo yum install -y cronie` before crontab |

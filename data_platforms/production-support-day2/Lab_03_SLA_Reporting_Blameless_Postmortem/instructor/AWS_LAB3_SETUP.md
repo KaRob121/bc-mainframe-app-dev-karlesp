@@ -2,7 +2,7 @@
 
 Complete this **before class**, after Lab 2 EC2 is running. Students follow [instructions.md](../instructions.md) — this guide is for you to prepare and verify the environment manually.
 
-**Region:** Canada (Central) — `ca-central-1`
+**Region:** US East (N. Virginia) — `us-east-1`
 
 ---
 
@@ -47,7 +47,7 @@ Wait 1–2 minutes for the role to propagate before testing metrics.
 
 ## 2. Verify Lab 2 instance (console)
 
-1. **EC2** → **Instances** (region: **Canada Central**)
+1. **EC2** → **Instances** (region: **US East (N. Virginia)**)
 2. Confirm instance state = **Running**
 3. Note **Public IPv4** and **Instance ID** for students
 
@@ -129,11 +129,11 @@ scp -i your-key.pem setup/send_metrics.sh ec2-user@<public-ip>:/tmp/
 
 | Problem | Fix |
 |---------|-----|
-| `Unable to locate credentials` / `aws login` | **No IAM role on the EC2 instance.** Attach `Lab3-EC2-CloudWatch-Role` (Section 1), wait 2 min, then run `aws sts get-caller-identity --region ca-central-1` on the instance — it must return an ARN, not an error |
+| `Unable to locate credentials` / `aws login` | **No IAM role on the EC2 instance.** Attach `Lab3-EC2-CloudWatch-Role` (Section 1), wait 2 min, then run `aws sts get-caller-identity --region us-east-1` on the instance — it must return an ARN, not an error |
 | `AccessDenied` on `put-metric-data` | Role attached but missing `Lab3-PutMetricData` inline policy — add policy from [setup/lab3_put_metric_data_policy.json](../setup/lab3_put_metric_data_policy.json), wait 2 min, retry |
 | `crontab: command not found` | Run `sudo yum install -y cronie` |
 | Custom metrics not in console | Wait 5 min; run `/opt/send_metrics.sh` manually |
-| Dashboard shows "No data" | Confirm region is `ca-central-1`; metrics exist under PaymentProcessor |
+| Dashboard shows "No data" | Confirm region is `us-east-1`; metrics exist under PaymentProcessor |
 | Alarms `INSUFFICIENT_DATA` | Normal until enough datapoints arrive (~5–10 min) |
 | `send_metrics.sh: cannot execute` | Windows line endings — re-copy via `scp` or run `sed -i 's/\r$//' /opt/send_metrics.sh` |
 

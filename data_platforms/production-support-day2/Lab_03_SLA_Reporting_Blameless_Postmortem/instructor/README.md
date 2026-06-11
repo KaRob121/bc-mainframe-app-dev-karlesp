@@ -1,7 +1,7 @@
 # Lab 3 — Instructor Package
 
 **Estimated setup time:** 15–20 minutes (after Lab 2 is complete)  
-**Region:** Canada (Central) — `ca-central-1`
+**Region:** US East (N. Virginia) — `us-east-1`
 
 ---
 
@@ -10,7 +10,7 @@
 1. Complete **Lab 2** setup — EC2 running, students can SSH, `payment-processor` fixed.
 2. Follow **[AWS_LAB3_SETUP.md](AWS_LAB3_SETUP.md)** — attach IAM role for CloudWatch metrics.
 3. Walk through **[instructions.md](../instructions.md)** yourself once to verify console paths and commands.
-4. Distribute to students: EC2 public IP, `.pem` key, region (`ca-central-1`).
+4. Distribute to students: EC2 public IP, `.pem` key, region (`us-east-1`).
 
 ---
 

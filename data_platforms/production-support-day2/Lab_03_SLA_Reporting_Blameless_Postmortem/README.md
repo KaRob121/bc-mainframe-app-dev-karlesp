@@ -21,7 +21,7 @@
 |------|--------|
 | Lab steps | [instructions.md](instructions.md) |
 | EC2 public IP and `.pem` key | Instructor (from Lab 2) |
-| AWS region | **Canada (Central) — `ca-central-1`** |
+| AWS region | **US East (N. Virginia) — `us-east-1`** |
 | Starter workbook | [template/lab3_starter.xlsx](template/lab3_starter.xlsx) |
 | Helper scripts (optional) | [setup/send_metrics.sh](setup/send_metrics.sh), [setup/cloudwatch_agent_config.json](setup/cloudwatch_agent_config.json) |
 

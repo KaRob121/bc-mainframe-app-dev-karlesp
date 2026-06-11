@@ -15,7 +15,7 @@ aws cloudwatch put-metric-data \
   --value "$SERVICE_STATUS" \
   --unit Count \
   --dimensions InstanceId="$INSTANCE_ID" \
-  --region ca-central-1
+  --region us-east-1
 
 RANDOM_TIME=$((RANDOM % 200 + 50))
 aws cloudwatch put-metric-data \
@@ -24,6 +24,6 @@ aws cloudwatch put-metric-data \
   --value "$RANDOM_TIME" \
   --unit Milliseconds \
   --dimensions InstanceId="$INSTANCE_ID" \
-  --region ca-central-1
+  --region us-east-1
 
 echo "Metrics sent at $(date) status=$SERVICE_STATUS response_ms=$RANDOM_TIME"
