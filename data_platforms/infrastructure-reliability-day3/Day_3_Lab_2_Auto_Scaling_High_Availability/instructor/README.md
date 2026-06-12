@@ -80,6 +80,7 @@ python setup/test_asg_lab2.py --prerequisites-only
 | Selected public subnets for ASG | Instances must use **private** subnets only |
 | Skipped Step 1C/1D (public subnets) | ALB requires `Public-Subnet-B` + `Public-Subnet-C` |
 | One target **unused** in target group | ALB used `Public-Subnet-A` instead of B+C — edit ALB subnets |
+| **us-east-1b** instance keeps restarting; **us-east-1c** OK | ALB not in us-east-1b → ELB health fail → ASG replacement loop — fix ALB to **Public-Subnet-B + Public-Subnet-C** |
 | User data not pasted | Instances launch but targets stay unhealthy — no Apache |
 | Health check type = EC2 instead of ELB | Change to ELB when attaching target group |
 | Terminated both instances at once | ASG replaces both but recovery takes longer — terminate **one** only |

@@ -109,7 +109,21 @@ By the end of this lab, you will be able to:
 **What Lab 1 provides:** VPC, NAT Gateway, `Web-SG`, `Private-Subnet-B`, `Public-Subnet-A`.  
 **What Lab 2 adds:** `Private-Subnet-C`, `Public-Subnet-B`, `Public-Subnet-C`, Launch Template, Target Group, ALB, ASG.
 
-> **AZ alignment:** ASG instances run in **us-east-1b** and **us-east-1c**. The ALB must use **`Public-Subnet-B` (1b)** and **`Public-Subnet-C` (1c)** — not `Public-Subnet-A` (1a). See [instructor/CONSOLE_UI_GUIDE.md](instructor/CONSOLE_UI_GUIDE.md) if a target shows **unused**.
+> **AZ alignment (critical):** ASG instances run in **us-east-1b** and **us-east-1c**. The ALB must use **`Public-Subnet-B` (1b)** and **`Public-Subnet-C` (1c)** — **not** `Public-Subnet-A` (1a).
+
+### If one instance keeps restarting (common issue)
+
+**Symptom:** Instance in **us-east-1c** is stable, but **us-east-1b** keeps terminating and relaunching (or only one target ever becomes healthy).
+
+**Cause:** The ALB is not enabled in **us-east-1b**, so the target in that AZ fails the **ELB health check**. The ASG replaces the “unhealthy” instance — which looks like a restart loop.
+
+**Fix before continuing past Step 8:**
+1. **EC2 → Target Groups → `ASG-TG` → Targets** — check the **us-east-1b** row. If status is **unused**, read the reason (*Availability Zone not enabled for the load balancer*).
+2. **EC2 → Load Balancers → `ASG-ALB` → Network mapping → Edit subnets** — select **`Public-Subnet-B` (1b)** + **`Public-Subnet-C` (1c)** only.
+3. If **`Public-Subnet-B`** is missing, create it in **Step 1D** first.
+4. Wait **2–3 minutes** — both targets should show **healthy**.
+
+Full instructor guide: [instructor/CONSOLE_UI_GUIDE.md](instructor/CONSOLE_UI_GUIDE.md)
 
 ---
 
@@ -172,9 +186,9 @@ Click **Create subnet**.
 2. **Subnet associations** → **Edit subnet associations**.
 3. Check **`Public-Subnet-C`** (keep **`Public-Subnet-A`** checked) → **Save changes**.
 
-### 1D — Create public subnet for ALB in us-east-1b (if missing)
+### 1D — Create public subnet for ALB in us-east-1b (required)
 
-> **Why:** ASG instances launch in **us-east-1b** and **us-east-1c**. The ALB needs a **public subnet in us-east-1b** so targets in that AZ are not marked **unused**.
+> **Required — do not skip.** ASG instances launch in **us-east-1b** and **us-east-1c**. Without **`Public-Subnet-B`**, you cannot place the ALB in us-east-1b. The us-east-1b instance will fail health checks and the ASG will keep replacing it (looks like a restart loop).
 
 **Console path:** VPC Dashboard → **Subnets** → **Create subnet**
 
@@ -319,7 +333,15 @@ Click **Create target group**.
 | `Public-Subnet-B` | us-east-1b | ALB node — same AZ as `Private-Subnet-B` |
 | `Public-Subnet-C` | us-east-1c | ALB node — same AZ as `Private-Subnet-C` |
 
-> **Do not** select `Public-Subnet-A` for the ALB. It is in us-east-1a where no ASG instances run; targets in us-east-1b would show **unused**.
+> **Do not** select `Public-Subnet-A` for the ALB. It is in **us-east-1a** where no ASG instances run. A common mistake is picking **`Public-Subnet-A` + `Public-Subnet-C`** — that leaves **us-east-1b** uncovered and causes the **us-east-1b instance restart loop**.
+
+**Before you click Create — confirm Network mapping shows:**
+
+| Subnet selected | AZ | Select? |
+|-----------------|-----|---------|
+| `Public-Subnet-B` | us-east-1b | **Yes** |
+| `Public-Subnet-C` | us-east-1c | **Yes** |
+| `Public-Subnet-A` | us-east-1a | **No** |
 
 **Security groups:**
 
@@ -502,17 +524,29 @@ Click **Create Auto Scaling group**.
 **Action:**
 
 1. Wait until both instances show **Health status = healthy** (may take 1–2 minutes after launch).
-2. Confirm instances are in **different Availability Zones**.
+2. Confirm instances are in **different Availability Zones** (**us-east-1b** and **us-east-1c**).
+3. **Stop here if one target is not healthy** — do not continue to Step 9 until both are **healthy**.
+
+### Target status guide
+
+| Health status | What it means | What to do |
+|---------------|---------------|------------|
+| **healthy** | ALB can reach Apache on port 80 | Continue |
+| **initial** / **draining** | Health check in progress | Wait 2–3 minutes, refresh |
+| **unhealthy** | Health check failed (no web server or SG block) | Verify user data in `WebServer-LT`; `Web-SG` allows HTTP:80 |
+| **unused** | Instance AZ not on the ALB | **Edit `ASG-ALB` subnets** → **`Public-Subnet-B` + `Public-Subnet-C`** (Step 4 fix) |
+
+> **Restart loop?** If **us-east-1b** keeps launching and terminating while **us-east-1c** is fine, the **unused** / wrong-AZ ALB mapping is almost always the cause. Fix the ALB subnets, then watch **ASG → Activity** — replacements should stop.
 
 **Verify:**
 
 | Check | Expected |
 |-------|----------|
 | Registered targets | 2 |
-| Health status | Both `healthy` |
-| Availability Zones | Different (e.g., us-east-1b and us-east-1c) |
+| Health status | Both `healthy` (not **unused**) |
+| Availability Zones | **us-east-1b** and **us-east-1c** |
 
-**Screenshot:** Targets tab showing two healthy instances in different AZs.
+**Screenshot:** Targets tab showing two **healthy** instances in **us-east-1b** and **us-east-1c**.
 
 **Checkpoint:** `"Step 8 completed"`
 
@@ -725,6 +759,8 @@ The **target tracking scaling policy** triggers scale-out. ASG launches addition
 | Can't SSH into instance | Instance in private subnet | Use bastion in public subnet, or skip Step 14 |
 | ALB creation fails (subnets) | Only one public subnet | Create `Public-Subnet-C` in Step 1C and `Public-Subnet-B` in Step 1D |
 | One target **unused** / wrong AZ | ALB subnets do not cover instance AZs | Use **`Public-Subnet-B` + `Public-Subnet-C`** on ALB (Step 4); see [CONSOLE_UI_GUIDE.md](instructor/CONSOLE_UI_GUIDE.md) |
+| **us-east-1b** instance keeps restarting; **us-east-1c** fine | ALB missing **us-east-1b** subnet (often `Public-Subnet-A` + `Public-Subnet-C` by mistake) | Create **`Public-Subnet-B`** (Step 1D) → edit **`ASG-ALB`** → subnets **B + C** only → wait for both targets **healthy** |
+| ASG Activity shows repeated launch/terminate in one AZ | ELB health check failing for that AZ | Fix ALB subnet mapping first; then check user data and `Private-RT` NAT route for **`Private-Subnet-B`** |
 
 ---
 

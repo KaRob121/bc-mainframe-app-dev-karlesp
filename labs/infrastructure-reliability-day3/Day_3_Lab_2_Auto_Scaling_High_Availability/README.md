@@ -16,6 +16,8 @@
 3. Open **[instructions.md](instructions.md)** and follow Steps 1–14.
 4. Use the **[screenshot checklist](instructions.md#aws-region-and-screenshot-checklist)** to know exactly what to capture in the console for each step.
 
+> **Stuck with one instance restarting?** If **us-east-1c** is fine but **us-east-1b** keeps cycling, see [If one instance keeps restarting](instructions.md#if-one-instance-keeps-restarting-common-issue) in the instructions — usually the ALB needs **`Public-Subnet-B` + `Public-Subnet-C`**.
+
 ---
 
 ## Screenshots — region and console pages

@@ -22,6 +22,25 @@ Quick reference when a participant says “I can’t find my resource” or a he
 
 ---
 
+## us-east-1b instance keeps restarting (restart loop)
+
+**Symptom:** Student reports one instance in **us-east-1c** runs fine, but the **us-east-1b** instance keeps terminating and relaunching. **ASG → Activity** shows a repeating launch/terminate pattern for the same AZ.
+
+**Cause:** Same as above — the **us-east-1b** target fails **ELB health checks** because the ALB has no node in **us-east-1b**. The ASG (with health check type **ELB**) replaces the “unhealthy” instance. This is expected ASG behavior, not a random reboot.
+
+**Diagnosis (ask for screenshots):**
+1. **Target Groups → `ASG-TG` → Targets** — us-east-1b row likely **unused** or **unhealthy**
+2. **Load Balancers → `ASG-ALB` → Network mapping** — often shows **`Public-Subnet-A` + `Public-Subnet-C`** instead of **B + C**
+3. **VPC → Subnets** — **`Public-Subnet-B`** may be missing if Step 1D was skipped
+
+**Fix:** Same four steps as **ALB subnets must match** above. After ALB edit, replacements should stop within **2–5 minutes**.
+
+**If both targets are unhealthy (not unused):** Check launch template user data (`setup/user_data.sh`) and **`Private-RT`** NAT route for **`Private-Subnet-B`**.
+
+**Reply template for students:** See [../instructions.md](../instructions.md) — section *If one instance keeps restarting*.
+
+---
+
 ## Security groups — same as Lab 1
 
 **Symptom:** Student types `Lab1-VPC` in the Security groups search box → **No matching resource found**.

@@ -85,7 +85,9 @@ Use this to verify student submissions (screenshots or live console review). All
 | Running instances | 2 |
 | ASG Activity | Successful launch events |
 | Target group registered | 2 targets |
-| Target health | Both healthy |
+| Target health | Both healthy in **us-east-1b** and **us-east-1c** (not **unused**) |
+
+**Common failure:** One AZ healthy, other **unused** or instance restart loop → ALB subnets must be **`Public-Subnet-B` + `Public-Subnet-C`**, not A+C.
 | AZ spread | Different AZs (typically 1b and 1c) |
 
 ---
