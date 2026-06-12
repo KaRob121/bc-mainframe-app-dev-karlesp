@@ -10,7 +10,8 @@
 1. Confirm students completed **[Day 3 Lab 2](../../Day_3_Lab_2_Auto_Scaling_High_Availability/instructions.md)** (`WebServer-ASG` at 2/2/6 with 2 healthy instances).
 2. Follow **[AWS_LAB3_SETUP.md](AWS_LAB3_SETUP.md)** — run the validation script after building the reference lab.
 3. Walk through **[instructions.md](../instructions.md)** Steps 1–11 in the console to confirm UI paths match.
-4. Tell students:
+4. Review **[CONSOLE_UI_GUIDE.md](CONSOLE_UI_GUIDE.md)** — validated screenshot expectations and common student issues.
+5. Tell students:
    - Region must be **`us-east-1`**
    - Exact resource names from the guide
    - **Confirm SNS email subscription before Step 9** — most common failure
@@ -27,6 +28,7 @@
 | [AWS_LAB3_SETUP.md](AWS_LAB3_SETUP.md) | Pre-lab IAM, validation script, teardown order |
 | [answer_key.md](answer_key.md) | Expected values per step for grading |
 | [../instructions.md](../instructions.md) | Student guide — Steps 1–14 |
+| [CONSOLE_UI_GUIDE.md](CONSOLE_UI_GUIDE.md) | Console troubleshooting and screenshot grading |
 | [../setup/test_alerting_lab3.py](../setup/test_alerting_lab3.py) | Validate alerting stack |
 | [../setup/format_asg_alerts.py](../setup/format_asg_alerts.py) | Lambda reference code |
 | [../setup/requirements.txt](../setup/requirements.txt) | Python dependencies |

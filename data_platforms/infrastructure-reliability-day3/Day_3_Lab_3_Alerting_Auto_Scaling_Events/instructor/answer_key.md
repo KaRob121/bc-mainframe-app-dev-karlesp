@@ -122,6 +122,12 @@ Both rules visible on EventBridge Rules list.
 
 CloudWatch scale-in alarm email may appear briefly during replacement — accept as valid.
 
+**Screenshot alternatives (Steps 10–11):** Accept console evidence if email is delayed — Step 10: **`ASG-Scale-In-Alert`** detail or ASG **Activity** terminate row; Step 11: **`WebServer-ASG` → Instance management** with 2 **InService**. EventBridge emails arrive as **JSON** (sender may show **ASG**). Do not require unredacted personal email in submissions.
+
+**Step 1:** Accept **Details**, **Activity**, or **Instance management** tab if capacity 2/2/6 and 2 healthy instances are visible.
+
+See [CONSOLE_UI_GUIDE.md](CONSOLE_UI_GUIDE.md) for full grading notes.
+
 ---
 
 ## Step 12 — Lambda (optional)

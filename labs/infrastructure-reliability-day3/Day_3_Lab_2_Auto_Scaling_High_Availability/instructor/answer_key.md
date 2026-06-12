@@ -9,8 +9,9 @@ Use this to verify student submissions (screenshots or live console review). All
 | Resource | Expected value |
 |----------|----------------|
 | VPC | `Lab1-VPC` · 10.0.0.0/16 · Available |
-| `Public-Subnet-A` | us-east-1a · 10.0.1.0/24 · Public-RT |
-| `Public-Subnet-C` | us-east-1c · 10.0.5.0/24 · Public-RT |
+| `Public-Subnet-A` | us-east-1a · 10.0.1.0/24 · Public-RT · Lab 1 NAT only |
+| `Public-Subnet-B` | us-east-1b · 10.0.6.0/24 · Public-RT · ALB (Step 1D) |
+| `Public-Subnet-C` | us-east-1c · 10.0.5.0/24 · Public-RT · ALB |
 | `Private-Subnet-B` | us-east-1b · 10.0.2.0/24 · Private-RT |
 | `Private-Subnet-C` | us-east-1c · 10.0.4.0/24 · Private-RT |
 | `Web-SG` | HTTP:80 from 0.0.0.0/0 · SSH:22 from student IP/32 |
@@ -55,7 +56,7 @@ Use this to verify student submissions (screenshots or live console review). All
 | Type | application |
 | Scheme | internet-facing |
 | State | active |
-| Subnets | Public-Subnet-A + Public-Subnet-C (different AZs) |
+| Subnets | Public-Subnet-B + Public-Subnet-C (us-east-1b + us-east-1c) |
 | Security group | Web-SG |
 | Listener | HTTP:80 → forward to ASG-TG |
 | DNS name | `ASG-ALB-*.us-east-1.elb.amazonaws.com` |
@@ -104,7 +105,7 @@ Use this to verify student submissions (screenshots or live console review). All
 |-------|----------|
 | After terminate one instance | ASG Activity shows replacement launch |
 | Target group | Returns to 2 healthy targets |
-| Recovery time | Typically 2–4 minutes · must be under 5 minutes |
+| Recovery time | Typically 2–8 minutes · document actual measured time |
 
 Student should document three timestamps and calculated recovery time.
 

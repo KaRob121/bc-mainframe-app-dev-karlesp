@@ -16,6 +16,7 @@
 3. Have a **real email address** ready for SNS subscription confirmation.
 4. Open **[instructions.md](instructions.md)** and follow Steps 1–14.
 5. Before each screenshot, check **[AWS region and screenshot checklist](instructions.md#aws-region-and-screenshot-checklist)** — console path and what must be visible.
+6. Compare your screen to **local reference captures** in `Lab Screenshots Day 3/Lab 3/` (**do not commit PNGs to git**).
 
 ---
 
@@ -31,6 +32,7 @@
 | Email address | For SNS subscription (must confirm link) |
 | Architecture diagram | [diagrams/lab3-alerting-architecture.svg](diagrams/lab3-alerting-architecture.svg) |
 | Screenshot guide | [screenshots/README.md](screenshots/README.md) |
+| Reference screenshots (local) | `Lab Screenshots Day 3/Lab 3/README.md` — **do not commit PNGs** |
 
 > **Instructor materials** (setup guide, answer key, validation script) are in the [`instructor/`](instructor/) folder.
 

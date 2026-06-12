@@ -55,6 +55,7 @@ pip install -r setup/requirements.txt
 === Lab 2 Prerequisites ===
 PASS  VPC Lab1-VPC exists (vpc-...)
 PASS  Public-Subnet-A in us-east-1a
+PASS  Public-Subnet-B in us-east-1b
 PASS  Public-Subnet-C in us-east-1c
 PASS  Private-Subnet-B in us-east-1b
 PASS  Private-Subnet-C in us-east-1c
@@ -91,7 +92,7 @@ Delete in this order to avoid dependency errors:
 
 **Do not delete** Lab 1 VPC, NAT, or firewall until Lab 1 teardown per Lab 1 instructions.
 
-Optional subnets created in Lab 2 Step 1 (`Private-Subnet-C`, `Public-Subnet-C`) may remain for future labs or be deleted with the VPC.
+Optional subnets created in Lab 2 Step 1 (`Private-Subnet-C`, `Public-Subnet-B`, `Public-Subnet-C`) may remain for future labs or be deleted with the VPC.
 
 ---
 

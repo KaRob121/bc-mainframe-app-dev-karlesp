@@ -15,6 +15,8 @@ All paths below are relative to the **Lab 3 folder** (`Day_3_Lab_3_Alerting_Auto
 | Architecture diagram | `diagrams/lab3-alerting-architecture.svg` | Reference |
 | Lambda code (optional) | `setup/format_asg_alerts.py` | Copy into Lambda editor (Step 12) |
 | Screenshot naming guide | `screenshots/README.md` | After each step |
+| Console UI troubleshooting (instructors) | `instructor/CONSOLE_UI_GUIDE.md` | When students are stuck |
+| Reference screenshots (local only) | `Lab Screenshots Day 3/Lab 3/` | Compare your screen — **do not commit PNGs to git** |
 | Instructor setup (instructors only) | `instructor/AWS_LAB3_SETUP.md` | Pre-class |
 
 ---
@@ -30,6 +32,25 @@ All paths below are relative to the **Lab 3 folder** (`Day_3_Lab_3_Alerting_Auto
 > **Naming is important.** Use the exact resource names in this guide (`ASG-Alerts`, `ASG-Scale-Out-Alert`, etc.) so your instructor can verify your work quickly.
 
 > **Do not delete Lab 2 resources during this lab.** Lab 3 adds alerting on top of your existing Auto Scaling Group.
+
+---
+
+## AWS Console — how to find your lab resources
+
+| Service | Console path | Search / filter tip |
+|---------|--------------|---------------------|
+| **Auto Scaling Group** | EC2 → **Auto Scaling Groups** | Select **`WebServer-ASG`** — use **Details**, **Activity**, and **Instance management** tabs |
+| **SNS topic** | SNS → **Topics** | Topic name **`ASG-Alerts`** |
+| **SNS subscription** | SNS → **Subscriptions** | Status must be **Confirmed** before Step 9 |
+| **CloudWatch alarms** | CloudWatch → **Alarms** → **All alarms** | Filter or scroll to **`ASG-Scale-Out-Alert`** and **`ASG-Scale-In-Alert`** |
+| **EventBridge rules** | Amazon EventBridge → **Rules** | **`ASG-Instance-Launch-Alert`**, **`ASG-Instance-Terminate-Alert`** |
+| **Dashboard** | CloudWatch → **Dashboards** | **`ASG-Monitoring-Dashboard`** |
+
+**Extra alarms are normal:** Lab 2 creates **`TargetTracking-WebServer-ASG-AlarmHigh/Low`** alarms automatically. Ignore those — this lab adds **`ASG-Scale-Out-Alert`** and **`ASG-Scale-In-Alert`** only.
+
+**Screenshot privacy:** Steps 3 and 10–11 may show your email address. **Crop or blur your inbox address** before submitting if your instructor requires it. Do not commit screenshot PNGs to GitHub.
+
+**Reference UI (local folder):** See `Lab Screenshots Day 3/Lab 3/README.md` for step-by-step navigation matched to validated captures.
 
 ---
 
@@ -58,8 +79,8 @@ All paths below are relative to the **Lab 3 folder** (`Day_3_Lab_3_Alerting_Auto
 | **7** | **Amazon EventBridge** → **Rules** | Region **`us-east-1`** · **both** rules listed: **`ASG-Instance-Launch-Alert`** and **`ASG-Instance-Terminate-Alert`** · both **Enabled** |
 | **8** | **CloudWatch** → **Dashboards** → `ASG-Monitoring-Dashboard` | Region **`us-east-1`** · dashboard name **`ASG-Monitoring-Dashboard`** · at least **3–4 widgets** visible · metrics include **GroupDesiredCapacity**, **GroupInServiceInstances**, **GroupTotalInstances** for **`WebServer-ASG`** |
 | **9** | **EC2** → **Instances** | Region **`us-east-1`** · one instance from **`WebServer-ASG`** with state **`Shutting-down`** or **`Terminated`** · **Instance ID** visible · only **one** instance terminated (not both) |
-| **10** | **Your email inbox** *(not AWS Console)* | Email from **AWS Notifications** · subject contains **`EC2 Instance Terminate Successful`** or **`ALARM: "ASG-Scale-In-Alert"`** · sent within a few minutes after Step 9 |
-| **11** | **Your email inbox** *(not AWS Console)* | Email from **AWS Notifications** · subject contains **`EC2 Instance Launch Successful`** · message body shows **Instance ID** · sent after ASG replaces the terminated instance |
+| **10** | **Your email inbox** *(preferred)* **or** CloudWatch → **`ASG-Scale-In-Alert`** / ASG **Activity** | Email from **AWS Notifications** · subject **`EC2 Instance Terminate Successful`** or **`ASG-Scale-In-Alert`** · *or* console showing terminate event / scale-in alarm |
+| **11** | **Your email inbox** *(preferred)* **or** EC2 → **`WebServer-ASG` → Instance management** | Email **`EC2 Instance Launch Successful`** · JSON body includes **Instance ID** · *or* **2 InService** instances after replacement |
 | **12** | **Lambda** → **Functions** → `FormatASGAlerts` *(optional)* | Region **`us-east-1`** · function name **`FormatASGAlerts`** · Python runtime · **Environment variable** `SNS_TOPIC_ARN` set · **EventBridge trigger** attached |
 | **13** | **EC2** → **Auto Scaling Groups** → `WebServer-ASG` → **Activity** tab *(optional)* | Region **`us-east-1`** · scale-out activity (desired capacity **> 2**) after CPU load — *or* **CloudWatch** → **`ASG-Scale-Out-Alert`** in **In alarm** state |
 | **14** | **SNS** → **Topics** or **CloudWatch** → **Alarms** *(optional)* | Region **`us-east-1`** · Lab 3 resources deleted (empty alarms list, or topic `ASG-Alerts` no longer exists) |
@@ -124,7 +145,15 @@ WebServer-ASG (from Lab 2)
 4. Click the **Activity** tab.
 5. Confirm recent **Launching a new EC2 instance** activities show status **Successful**.
 
-6. Click the **Instance management** tab — confirm **2** instances with lifecycle state **InService**.
+6. Click the **Instance management** tab — confirm **2** instances with lifecycle state **InService** and Health **Healthy**.
+
+### What you should see
+
+| Tab | Expected |
+|-----|----------|
+| **Details** (or page header) | Desired **2**, Min **2**, Max **6**, status **At desired capacity** |
+| **Activity** | **Launching a new EC2 instance** rows with Status **Successful** |
+| **Instance management** | **2** rows — Lifecycle **InService**, Health **Healthy** |
 
 **Verify:**
 
@@ -135,7 +164,7 @@ WebServer-ASG (from Lab 2)
 | Running instances | 2 InService |
 | Activity history | Successful launches |
 
-**Screenshot:** Auto Scaling Group details showing capacity 2/2/6 and Activity tab with successful launches.
+**Screenshot:** **`Step_01_ASG_Verified.png`** — capacity **2/2/6** and **2 InService** instances. **Instance management** tab is clearest; **Details** or **Activity** also accepted.
 
 **Checkpoint:** `"Step 1 completed"`
 
@@ -205,6 +234,8 @@ WebServer-ASG (from Lab 2)
 
 > **Important:** Alerts will **not** arrive until the subscription is confirmed. Complete this step before testing in Steps 9–11.
 
+> **Privacy:** Your email address appears in the Subscriptions table. **Crop or blur it** in your screenshot before submitting if required by your instructor.
+
 **Verify:**
 
 | Check | Expected |
@@ -259,6 +290,10 @@ WebServer-ASG (from Lab 2)
 
 4. Click **Next** through remaining pages (defaults are fine) → **Create alarm**.
 
+5. Open the alarm → **Actions** tab — confirm: *When alarm transitions to in alarm, send message to topic **ASG-Alerts***.
+
+> **Note:** You may also see **`TargetTracking-WebServer-ASG-AlarmHigh`** from Lab 2 on the All alarms page — ignore it for this lab.
+
 **Verify:**
 
 | Check | Expected |
@@ -268,7 +303,7 @@ WebServer-ASG (from Lab 2)
 | SNS action | ASG-Alerts |
 | Initial state | OK (while desired = 2) |
 
-**Screenshot:** Alarm `ASG-Scale-Out-Alert` showing threshold > 2 and SNS notification to `ASG-Alerts`.
+**Screenshot:** **`Step_04_Scale_Out_Alarm.png`** — **`Actions`** tab (preferred) or alarm graph showing **> 2** and SNS **`ASG-Alerts`**.
 
 **Checkpoint:** `"Step 4 completed"`
 
@@ -482,6 +517,8 @@ Click **Create dashboard**.
 
 Click **Save dashboard**.
 
+> **Empty widgets?** Set the dashboard time range to **3 hours** (top-right). Metrics may take a few minutes to appear after ASG activity.
+
 **Verify:**
 
 | Check | Expected |
@@ -544,14 +581,14 @@ Click **Save dashboard**.
 | `EC2 Instance Terminate Successful` | EventBridge → SNS |
 | `ALARM: "ASG-Scale-In-Alert" in US East (N. Virginia)` | CloudWatch (may appear briefly during replacement) |
 
-> Email subjects vary slightly by region wording. Look for messages from **AWS Notifications** (`no-reply@sns.amazonaws.com`).
+> Email subjects vary slightly by region wording. Look for messages from **AWS Notifications** (`no-reply@sns.amazonaws.com`). EventBridge messages arrive as **JSON** in the email body (sender may display as **ASG**).
 
-### Also verify in console
+### Also verify in console (if email is delayed)
 
-1. **Auto Scaling Groups** → **`WebServer-ASG`** → **Activity** — replacement launch in progress.
-2. **CloudWatch** → **Alarms** — one or both alarms may briefly change state during the event.
+1. **Auto Scaling Groups** → **`WebServer-ASG`** → **Activity** — terminate row and replacement launch in progress.
+2. **CloudWatch** → **Alarms** → **`ASG-Scale-In-Alert`** — may show activity during replacement.
 
-**Screenshot:** Email alert for instance termination (or CloudWatch alarm email).
+**Screenshot:** **`Step_10_Terminate_Email_Alert.png`** — inbox showing terminate alert **(preferred)**, **or** CloudWatch **`ASG-Scale-In-Alert`** detail / ASG **Activity** terminate row. Redact personal email if submitting inbox captures.
 
 **Checkpoint:** `"Step 10 completed"`
 
@@ -572,7 +609,7 @@ Click **Save dashboard**.
 1. **Auto Scaling Groups** → **Instance management** — back to **2** InService instances.
 2. **EC2** → **Target Groups** → **`ASG-TG`** — **2 healthy** targets (may take 2–3 min after launch).
 
-**Screenshot:** Email alert for instance launch showing Instance ID in the message body.
+**Screenshot:** **`Step_11_Launch_Email_Alert.png`** — inbox showing **`EC2 Instance Launch Successful`** with Instance ID in JSON body **(preferred)**, **or** **`WebServer-ASG` → Instance management** showing **2 InService / Healthy** after replacement.
 
 **Checkpoint:** `"Step 11 completed"`
 

@@ -17,8 +17,10 @@ VPC_CIDR = "10.0.0.0/16"
 
 PUBLIC_SUBNETS = {
     "Public-Subnet-A": ("us-east-1a", "10.0.1.0/24"),
+    "Public-Subnet-B": ("us-east-1b", "10.0.6.0/24"),
     "Public-Subnet-C": ("us-east-1c", "10.0.5.0/24"),
 }
+ALB_PUBLIC_SUBNETS = ("Public-Subnet-B", "Public-Subnet-C")
 PRIVATE_SUBNETS = {
     "Private-Subnet-B": ("us-east-1b", "10.0.2.0/24"),
     "Private-Subnet-C": ("us-east-1c", "10.0.4.0/24"),
@@ -198,6 +200,26 @@ def check_target_group(elbv2, vpc_id: str, result: CheckResult) -> str | None:
     return tg["TargetGroupArn"]
 
 
+def check_alb_subnets(
+    elbv2, subnets: dict[str, dict], result: CheckResult, alb_arn: str
+) -> None:
+    resp = elbv2.describe_load_balancers(LoadBalancerArns=[alb_arn])
+    alb = resp.get("LoadBalancers", [{}])[0]
+    alb_subnet_ids = {az["SubnetId"] for az in alb.get("AvailabilityZones", [])}
+    expected_ids = {
+        subnets[name]["SubnetId"]
+        for name in ALB_PUBLIC_SUBNETS
+        if name in subnets
+    }
+    if expected_ids and not expected_ids.issubset(alb_subnet_ids):
+        result.fail(
+            f"ALB {ALB_NAME} must use {ALB_PUBLIC_SUBNETS} "
+            f"(got subnet IDs {alb_subnet_ids})"
+        )
+    elif expected_ids:
+        result.ok(f"ALB uses {ALB_PUBLIC_SUBNETS}")
+
+
 def check_alb(elbv2, vpc_id: str, result: CheckResult) -> str | None:
     resp = elbv2.describe_load_balancers(Names=[ALB_NAME])
     lbs = resp.get("LoadBalancers", [])
@@ -342,9 +364,17 @@ def main() -> int:
         return 1
 
     print("\n=== Lab 2 Resources ===")
+    subnets = find_subnets_by_name(ec2, vpc["VpcId"])
     check_launch_template(ec2, result)
     tg_arn = check_target_group(elbv2, vpc["VpcId"], result)
     dns = check_alb(elbv2, vpc["VpcId"], result)
+    try:
+        alb_arn = elbv2.describe_load_balancers(Names=[ALB_NAME])["LoadBalancers"][0][
+            "LoadBalancerArn"
+        ]
+        check_alb_subnets(elbv2, subnets, result, alb_arn)
+    except ClientError:
+        pass
     check_asg(asg_client, result)
     check_target_health(elbv2, tg_arn, result)
 

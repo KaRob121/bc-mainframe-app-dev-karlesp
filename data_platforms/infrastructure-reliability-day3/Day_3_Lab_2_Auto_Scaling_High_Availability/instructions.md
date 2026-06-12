@@ -15,7 +15,8 @@ All paths below are relative to the **Lab 2 folder** (`Day_3_Lab_2_Auto_Scaling_
 | Architecture diagram | `diagrams/lab2-asg-architecture.svg` | Reference |
 | User data script | `setup/user_data.sh` | Copy into Launch Template (Step 2) |
 | Screenshot naming guide | `screenshots/README.md` | After each step |
-| Instructor setup (instructors only) | `instructor/AWS_LAB2_SETUP.md` | Pre-class |
+| Console UI troubleshooting (instructors) | `instructor/CONSOLE_UI_GUIDE.md` | When students are stuck |
+| Reference screenshots (local only) | `Lab Screenshots Day 3/Lab 2/` | Compare your screen — **do not commit PNGs to git** |
 
 ---
 
@@ -47,12 +48,12 @@ All paths below are relative to the **Lab 2 folder** (`Day_3_Lab_2_Auto_Scaling_
 
 | Step | AWS Console path | What must be visible in your screenshot |
 |------|------------------|----------------------------------------|
-| **1** | **VPC** → **Subnets** (filter by `Lab1-VPC`) | Region **`us-east-1`** · `Lab1-VPC` subnets · at least **two private** subnets in **different AZs** (`Private-Subnet-B`, `Private-Subnet-C`) · at least **two public** subnets in **different AZs** (`Public-Subnet-A`, `Public-Subnet-C`) |
+| **1** | **VPC** → **Subnets** (filter by `Lab1-VPC`) | Region **`us-east-1`** · `Lab1-VPC` subnets · **two private** in different AZs (`Private-Subnet-B`, `Private-Subnet-C`) · **two public** for ALB in different AZs (`Public-Subnet-B`, `Public-Subnet-C`) · plus Lab 1 subnets (`Public-Subnet-A`, `Firewall-Subnet-A`) |
 | **2** | **EC2** → **Launch Templates** → `WebServer-LT` | Region **`us-east-1`** · template name **`WebServer-LT`** · **Default version = 1** · **Auto Scaling guidance** enabled · security group **`Web-SG`** |
 | **3** | **EC2** → **Target Groups** → `ASG-TG` | Region **`us-east-1`** · name **`ASG-TG`** · Protocol **HTTP**, Port **80** · Health check path **`/`** · Success codes **200** · **0 registered targets** (before ASG launches) |
-| **4** | **EC2** → **Load Balancers** → `ASG-ALB` | Region **`us-east-1`** · name **`ASG-ALB`** · State **`provisioning`** · **two public subnets** in **different AZs** · Listener **HTTP:80** → **`ASG-TG`** |
+| **4** | **EC2** → **Load Balancers** → `ASG-ALB` | Region **`us-east-1`** · name **`ASG-ALB`** · State **`provisioning`** · subnets **`Public-Subnet-B`** (1b) + **`Public-Subnet-C`** (1c) · Listener **HTTP:80** → **`ASG-TG`** |
 | **5** | **EC2** → **Load Balancers** → `ASG-ALB` | Region **`us-east-1`** · State **`active`** · **DNS name** visible (e.g. `ASG-ALB-….elb.amazonaws.com`) |
-| **6** | **EC2** → **Auto Scaling Groups** → `WebServer-ASG` | Region **`us-east-1`** · name **`WebServer-ASG`** · **Desired 2 / Min 2 / Max 6** · **two private subnets** selected · Target group **`ASG-TG`** · scaling policy **`Scale-on-CPU`** at **70%** |
+| **6** | **EC2** → **Auto Scaling Groups** → `WebServer-ASG` | Region **`us-east-1`** · name **`WebServer-ASG`** · header **Desired 2 / limits 2–6** · **Automatic scaling** tab · policy **`Scale-on-CPU`** at **70%** · (verify subnets on **Details** tab) |
 | **7** | **EC2** → **Auto Scaling Groups** → `WebServer-ASG` → **Activity** tab | Region **`us-east-1`** · **Launching a new EC2 instance** message · Status **Successful** · capacity increasing to **2** |
 | **8** | **EC2** → **Target Groups** → `ASG-TG` → **Targets** tab | Region **`us-east-1`** · **2 registered targets** · both **Health status = healthy** · **different Availability Zones** |
 | **9** | **Browser** (not AWS Console) | Address bar shows **ALB DNS name** · web page shows **Instance ID**, **Availability Zone**, **Private IP** · title **Auto Scaling Group Demo** |
@@ -106,7 +107,9 @@ By the end of this lab, you will be able to:
 ```
 
 **What Lab 1 provides:** VPC, NAT Gateway, `Web-SG`, `Private-Subnet-B`, `Public-Subnet-A`.  
-**What Lab 2 adds:** Second private subnet, second public subnet (for ALB), Launch Template, Target Group, ALB, ASG.
+**What Lab 2 adds:** `Private-Subnet-C`, `Public-Subnet-B`, `Public-Subnet-C`, Launch Template, Target Group, ALB, ASG.
+
+> **AZ alignment:** ASG instances run in **us-east-1b** and **us-east-1c**. The ALB must use **`Public-Subnet-B` (1b)** and **`Public-Subnet-C` (1c)** — not `Public-Subnet-A` (1a). See [instructor/CONSOLE_UI_GUIDE.md](instructor/CONSOLE_UI_GUIDE.md) if a target shows **unused**.
 
 ---
 
@@ -121,7 +124,7 @@ By the end of this lab, you will be able to:
 
 | Subnet name | AZ | CIDR | Purpose |
 |-------------|-----|------|---------|
-| `Public-Subnet-A` | us-east-1a | 10.0.1.0/24 | NAT Gateway, ALB (AZ-a) |
+| `Public-Subnet-A` | us-east-1a | 10.0.1.0/24 | NAT Gateway (Lab 1) |
 | `Private-Subnet-B` | us-east-1b | 10.0.2.0/24 | ASG instances (AZ-b) |
 | `Firewall-Subnet-A` | us-east-1a | 10.0.3.0/24 | Network Firewall (Lab 1) |
 
@@ -169,16 +172,38 @@ Click **Create subnet**.
 2. **Subnet associations** → **Edit subnet associations**.
 3. Check **`Public-Subnet-C`** (keep **`Public-Subnet-A`** checked) → **Save changes**.
 
+### 1D — Create public subnet for ALB in us-east-1b (if missing)
+
+> **Why:** ASG instances launch in **us-east-1b** and **us-east-1c**. The ALB needs a **public subnet in us-east-1b** so targets in that AZ are not marked **unused**.
+
+**Console path:** VPC Dashboard → **Subnets** → **Create subnet**
+
+| Setting | Value |
+|---------|-------|
+| **VPC** | `Lab1-VPC` |
+| **Subnet name** | `Public-Subnet-B` |
+| **Availability Zone** | **us-east-1b** |
+| **IPv4 CIDR block** | `10.0.6.0/24` |
+
+Click **Create subnet**.
+
+**Associate with public route table:**
+
+1. Route tables → select **`Public-RT`**.
+2. **Subnet associations** → **Edit subnet associations**.
+3. Check **`Public-Subnet-B`** (keep **`Public-Subnet-A`** and **`Public-Subnet-C`** checked) → **Save changes**.
+
 **Verify:**
 
 | Check | Expected |
 |-------|----------|
 | Private subnets in different AZs | `Private-Subnet-B` (us-east-1b) + `Private-Subnet-C` (us-east-1c) |
-| Public subnets in different AZs | `Public-Subnet-A` (us-east-1a) + `Public-Subnet-C` (us-east-1c) |
+| Public subnets for ALB | `Public-Subnet-B` (us-east-1b) + `Public-Subnet-C` (us-east-1c) |
+| Lab 1 public subnet | `Public-Subnet-A` (us-east-1a) — NAT only, not used by ALB |
 | Both private subnets use `Private-RT` | Route table shows NAT route `0.0.0.0/0 → Lab1-NAT` |
-| Both public subnets use `Public-RT` | Route table shows IGW route `0.0.0.0/0 → Lab1-IGW` |
+| All public subnets use `Public-RT` | Route table shows IGW route `0.0.0.0/0 → Lab1-IGW` |
 
-**Screenshot:** Subnets list filtered by `Lab1-VPC` showing at least two private and two public subnets in **different** AZs.
+**Screenshot:** Subnets list filtered by `Lab1-VPC` showing private subnets **B/C**, public subnets **A/B/C**, and `Firewall-Subnet-A`.
 
 **Checkpoint:** `"Step 1 completed"`
 
@@ -220,7 +245,9 @@ Click **Create launch template**.
 | Security group | `Web-SG` |
 | User data | Script present (starts with `#!/bin/bash`) |
 
-**Screenshot:** Launch Templates list showing `WebServer-LT`, version 1, Auto Scaling guidance enabled.
+**UI tip:** After create, open **`WebServer-LT`** → confirm **Default version = 1** → sub-tab **Instance details** (AMI, `t2.micro`, `Web-SG`, key pair). User data is under **Advanced details** on the version.
+
+**Screenshot:** Launch template detail — `WebServer-LT`, version **1**, `Web-SG` on **Instance details**.
 
 **Checkpoint:** `"Step 2 completed"`
 
@@ -287,10 +314,12 @@ Click **Create target group**.
 
 **Network mapping — select exactly two public subnets in different AZs:**
 
-| Subnet | AZ |
-|--------|-----|
-| `Public-Subnet-A` | us-east-1a |
-| `Public-Subnet-C` | us-east-1c |
+| Subnet | AZ | Purpose |
+|--------|-----|---------|
+| `Public-Subnet-B` | us-east-1b | ALB node — same AZ as `Private-Subnet-B` |
+| `Public-Subnet-C` | us-east-1c | ALB node — same AZ as `Private-Subnet-C` |
+
+> **Do not** select `Public-Subnet-A` for the ALB. It is in us-east-1a where no ASG instances run; targets in us-east-1b would show **unused**.
 
 **Security groups:**
 
@@ -429,7 +458,9 @@ Click **Create Auto Scaling group**.
 | Health check | ELB |
 | Scaling policy | Scale-on-CPU at 70% |
 
-**Screenshot:** Auto Scaling group detail showing capacity settings, subnets, target group, and scaling policy.
+**UI tip:** After create, open **`WebServer-ASG`**. Page header shows **Desired capacity 2** and **Scaling limits 2–6**. Open **Automatic scaling** tab for **`Scale-on-CPU`** at **70%**. Use **Details** tab to confirm private subnets and target group.
+
+**Screenshot:** **`WebServer-ASG`** → **Automatic scaling** tab showing **`Scale-on-CPU`** at **70%**; header shows Desired **2** / limits **2–6**.
 
 **Checkpoint:** `"Step 6 completed"`
 
@@ -612,9 +643,17 @@ Recovery Time = (Time instance healthy) − (Time termination initiated)
 
 **Example:** 10:05:00 − 10:02:30 = **2 minutes 30 seconds**
 
-**Expected range:** Under **5 minutes** for this lab configuration.
+**Where to find times on AWS:**
 
-**Screenshot:** Your written recovery time calculation (notebook, text file, or screenshot of times).
+| Event | Console location |
+|-------|------------------|
+| Termination initiated | Your note when you clicked **Terminate** (EC2 → Instances) |
+| Replacement launch | **Auto Scaling Groups** → **`WebServer-ASG`** → **Activity** → Start time on launch row |
+| Instance healthy | When **Target Groups** → **`ASG-TG`** → **Targets** shows replacement **Healthy** |
+
+**Expected range:** Typically **2–8 minutes** (boot, user data, and health check thresholds affect duration).
+
+**Screenshot:** Your written recovery time calculation (notebook, text file, or spreadsheet) — not a single AWS console page.
 
 **Checkpoint:** `"Step 13 completed"`
 
@@ -654,7 +693,7 @@ stress --cpu 2 --timeout 600 &
 | 7 | Both instances healthy in target group | ☐ |
 | 8 | Load balancer serves web page in browser | ☐ |
 | 9 | Terminated instance automatically replaced | ☐ |
-| 10 | Recovery time calculated (< 5 minutes) | ☐ |
+| 10 | Recovery time calculated (typically 2–8 minutes) | ☐ |
 
 ---
 
@@ -684,7 +723,8 @@ The **target tracking scaling policy** triggers scale-out. ASG launches addition
 | `Access Denied` on yum in user data | Private subnet missing NAT route | Confirm `Private-RT` has `0.0.0.0/0 → Lab1-NAT` |
 | Scaling policy not triggering | CPU not sustained >70% | Run `stress` for 10+ minutes (optional Step 14) |
 | Can't SSH into instance | Instance in private subnet | Use bastion in public subnet, or skip Step 14 |
-| ALB creation fails (subnets) | Only one public subnet | Create `Public-Subnet-C` in Step 1C |
+| ALB creation fails (subnets) | Only one public subnet | Create `Public-Subnet-C` in Step 1C and `Public-Subnet-B` in Step 1D |
+| One target **unused** / wrong AZ | ALB subnets do not cover instance AZs | Use **`Public-Subnet-B` + `Public-Subnet-C`** on ALB (Step 4); see [CONSOLE_UI_GUIDE.md](instructor/CONSOLE_UI_GUIDE.md) |
 
 ---
 

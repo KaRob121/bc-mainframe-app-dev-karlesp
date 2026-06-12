@@ -31,14 +31,14 @@
 
 | Steps | Console |
 |-------|---------|
-| 1 | VPC → Subnets |
+| 1 | VPC → Subnets (Steps 1B–1D) |
 | 2 | EC2 → Launch Templates |
 | 3, 8, 12 | EC2 → Target Groups |
 | 4, 5 | EC2 → Load Balancers |
 | 6, 7, 11, 14 | EC2 → Auto Scaling Groups |
 | 9, 12 | Web browser → ALB DNS name |
 | 10 | EC2 → Instances |
-| 13 | Your written recovery time notes |
+| 13 | Your written recovery time notes (not a single AWS page) |
 
 ---
 
@@ -54,6 +54,8 @@
 | EC2 key pair | Existing key pair |
 | Architecture diagram | [diagrams/lab2-asg-architecture.svg](diagrams/lab2-asg-architecture.svg) |
 | Screenshot guide | [screenshots/README.md](screenshots/README.md) |
+| Reference screenshots (local) | `Lab Screenshots Day 3/Lab 2/README.md` — **do not commit PNGs** |
+| Console UI troubleshooting | [instructor/CONSOLE_UI_GUIDE.md](instructor/CONSOLE_UI_GUIDE.md) |
 
 > **Instructor materials** (setup guide, answer key, validation script) are in the [`instructor/`](instructor/) folder.
 

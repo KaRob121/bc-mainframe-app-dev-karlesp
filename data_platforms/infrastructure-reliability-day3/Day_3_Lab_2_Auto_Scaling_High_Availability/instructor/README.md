@@ -29,6 +29,7 @@
 | [../setup/test_asg_lab2.py](../setup/test_asg_lab2.py) | Validate Lab 1 prerequisites and Lab 2 resources |
 | [../setup/requirements.txt](../setup/requirements.txt) | Python dependencies |
 | [../setup/user_data.sh](../setup/user_data.sh) | Bootstrap script for launch template |
+| [CONSOLE_UI_GUIDE.md](CONSOLE_UI_GUIDE.md) | UI troubleshooting (unused targets, SG search, ASG tabs) |
 
 ---
 
@@ -77,7 +78,8 @@ python setup/test_asg_lab2.py --prerequisites-only
 | Lab 1 not complete | No NAT → user data yum fails; no Web-SG → launch template fails |
 | Only one private subnet in ASG | Edit ASG → add second private subnet in different AZ |
 | Selected public subnets for ASG | Instances must use **private** subnets only |
-| Skipped Step 1C (second public subnet) | ALB requires two public subnets in different AZs |
+| Skipped Step 1C/1D (public subnets) | ALB requires `Public-Subnet-B` + `Public-Subnet-C` |
+| One target **unused** in target group | ALB used `Public-Subnet-A` instead of B+C — edit ALB subnets |
 | User data not pasted | Instances launch but targets stay unhealthy — no Apache |
 | Health check type = EC2 instead of ELB | Change to ELB when attaching target group |
 | Terminated both instances at once | ASG replaces both but recovery takes longer — terminate **one** only |
