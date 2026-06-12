@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" width="720" role="img" aria-labelledby="title desc">
+  <title id="title">Lab 3 ASG Alerting Architecture</title>
+  <desc id="desc">Auto Scaling Group events flow through EventBridge and CloudWatch to SNS email alerts, with optional Lambda formatting.</desc>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5" markerHeight="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#00684A"/>
+    </marker>
+  </defs>
+  <style>
+    .frame { fill:#F4FBF6; stroke:#00684A; stroke-width:2; }
+    .hdr { fill:#00684A; }
+    .ht { font:600 13px Arial,sans-serif; fill:#fff; }
+    .asg { fill:#FFF3E0; stroke:#E65100; stroke-width:1.5; }
+    .svc { fill:#E8F5E9; stroke:#2E7D32; stroke-width:1.5; }
+    .alert { fill:#E3F2FD; stroke:#1565C0; stroke-width:1.5; }
+    .opt { fill:#F3E5F5; stroke:#7B1FA2; stroke-width:1.5; stroke-dasharray:4 3; }
+    .box { fill:#fff; stroke:#00684A; stroke-width:1.2; }
+    .t { font:600 11px Arial,sans-serif; fill:#001E2B; }
+    .b { font:9px Arial,sans-serif; fill:#5C6C75; }
+    .arr { stroke:#00684A; stroke-width:1.5; fill:none; marker-end:url(#ah); }
+  </style>
+
+  <rect x="10" y="10" width="700" height="500" rx="8" class="frame"/>
+  <rect x="10" y="10" width="700" height="28" rx="8" class="hdr"/>
+  <rect x="10" y="30" width="700" height="8" class="hdr"/>
+  <text x="360" y="30" text-anchor="middle" class="ht">Lab 3  Alerting on Auto Scaling Events</text>
+
+  <!-- ASG -->
+  <rect x="28" y="52" width="664" height="72" rx="6" class="asg"/>
+  <text x="360" y="76" text-anchor="middle" class="t">WebServer-ASG (from Lab 2)</text>
+  <text x="360" y="94" text-anchor="middle" class="b">Min 2 � Desired 2 � Max 6 � EC2 instances in private subnets</text>
+  <text x="360" y="110" text-anchor="middle" class="b">Launch / Terminate lifecycle events</text>
+
+  <!-- EventBridge -->
+  <rect x="28" y="148" width="320" height="120" rx="6" class="svc"/>
+  <text x="188" y="170" text-anchor="middle" class="t">Amazon EventBridge</text>
+  <rect x="48" y="184" width="130" height="44" rx="4" class="box"/>
+  <text x="113" y="202" text-anchor="middle" class="t">Launch Rule</text>
+  <text x="113" y="216" text-anchor="middle" class="b">Launch Successful</text>
+  <rect x="198" y="184" width="130" height="44" rx="4" class="box"/>
+  <text x="263" y="202" text-anchor="middle" class="t">Terminate Rule</text>
+  <text x="263" y="216" text-anchor="middle" class="b">Terminate Successful</text>
+  <text x="188" y="252" text-anchor="middle" class="b">Filter: AutoScalingGroupName = WebServer-ASG</text>
+
+  <!-- CloudWatch -->
+  <rect x="372" y="148" width="320" height="120" rx="6" class="alert"/>
+  <text x="532" y="170" text-anchor="middle" class="t">Amazon CloudWatch</text>
+  <rect x="392" y="184" width="130" height="44" rx="4" class="box"/>
+  <text x="457" y="202" text-anchor="middle" class="t">Scale-Out Alarm</text>
+  <text x="457" y="216" text-anchor="middle" class="b">Desired &gt; 2</text>
+  <rect x="542" y="184" width="130" height="44" rx="4" class="box"/>
+  <text x="607" y="202" text-anchor="middle" class="t">Scale-In Alarm</text>
+  <text x="607" y="216" text-anchor="middle" class="b">Desired &lt; 2</text>
+  <text x="532" y="252" text-anchor="middle" class="b">Dashboard: ASG-Monitoring-Dashboard</text>
+
+  <!-- SNS -->
+  <rect x="180" y="296" width="360" height="56" rx="6" class="alert"/>
+  <text x="360" y="318" text-anchor="middle" class="t">SNS Topic: ASG-Alerts</text>
+  <text x="360" y="336" text-anchor="middle" class="b">Standard topic � Email subscription (confirmed)</text>
+
+  <!-- Email -->
+  <rect x="260" y="376" width="200" height="44" rx="6" class="box"/>
+  <text x="360" y="404" text-anchor="middle" class="t">Email Alerts</text>
+
+  <!-- Optional Lambda -->
+  <rect x="28" y="440" width="320" height="56" rx="6" class="opt"/>
+  <text x="188" y="462" text-anchor="middle" class="t">Lambda FormatASGAlerts (Optional)</text>
+  <text x="188" y="480" text-anchor="middle" class="b">Formats EventBridge events � readable SNS email</text>
+
+  <!-- Arrows -->
+  <line x1="200" y1="124" x2="140" y2="148" class="arr"/>
+  <line x1="360" y1="124" x2="532" y2="148" class="arr"/>
+  <line x1="188" y1="268" x2="280" y2="296" class="arr"/>
+  <line x1="532" y1="268" x2="440" y2="296" class="arr"/>
+  <line x1="360" y1="352" x2="360" y2="376" class="arr"/>
+  <line x1="120" y1="268" x2="120" y2="440" class="arr"/>
+  <line x1="188" y1="468" x2="260" y2="324" class="arr"/>
+</svg>
