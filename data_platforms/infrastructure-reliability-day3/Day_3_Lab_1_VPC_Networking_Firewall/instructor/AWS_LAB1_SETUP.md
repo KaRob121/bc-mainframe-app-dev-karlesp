@@ -129,6 +129,7 @@ Or run: `python setup/test_vpc_lab1.py --teardown`
 | Issue | Cause | Fix |
 |-------|-------|-----|
 | `Network Firewall not available in region` | Wrong region | Use us-east-1 |
+| NAT create page has no Subnet field | Regional availability mode | Select **Zonal**, then choose `Public-Subnet-A` |
 | NAT create fails | No subnet with IGW route | Fix Public-RT before NAT |
 | `--validate-only` fails on firewall | Still PROVISIONING | Wait 5–10 min or use `--wait-firewall` on deploy |
 | VPC delete fails | NAT or firewall still exists | Run teardown script or delete manually in order above |

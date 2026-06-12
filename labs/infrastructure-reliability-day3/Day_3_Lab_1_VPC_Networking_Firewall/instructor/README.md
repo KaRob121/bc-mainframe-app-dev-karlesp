@@ -70,6 +70,7 @@ After you build the lab manually (or with `--deploy`), all checks should print `
 | Thinks lab failed because default VPC exists | Default VPC `172.31.0.0/16` is normal; lab uses **`Lab1-VPC`** `10.0.0.0/16` |
 | Confused by **four** route tables | Fourth row is **Main** route table — required; lab uses Public/Private/Firewall-RT |
 | Wrong region (e.g. us-west-2) | AZ names won't match; switch to us-east-1 and recreate |
+| **NAT create page shows VPC only, no Subnet** | **Regional** mode selected | Switch **Availability mode** to **Zonal**, then pick `Public-Subnet-A` |
 | NAT in private subnet | NAT must be in `Public-Subnet-A` |
 | Forgot Public-RT IGW route | Public subnet won't reach internet; add 0.0.0.0/0 → IGW |
 | SSH rule uses bare IP | Must be CIDR: `203.0.113.45/32` |

@@ -42,6 +42,24 @@ Quick reference when a participant says “I can’t find my resource.”
 
 ---
 
+## NAT Gateway — Regional vs Zonal availability mode
+
+**Symptom:** Student on **Create NAT gateway** sees only a **VPC** dropdown — no **Subnet** field.
+
+**Cause:** AWS defaults to **Regional** availability mode (new option). Regional NAT is placed at the VPC level and scales across AZs automatically — the console does not ask for a subnet in that mode.
+
+**Fix (tell the student):**
+1. Under **Availability mode**, select **Zonal**
+2. **Subnet** appears — choose **`Public-Subnet-A`**
+3. **Connectivity type:** **Public**
+4. Allocate an Elastic IP and create the gateway
+
+**Proof it worked:** NAT detail shows **State = Available**, **Subnet = Public-Subnet-A**, and a public Elastic IP.
+
+> **Note:** Waiting 1–2 minutes for **Available** is normal. Do not continue to Step 5 route-table updates until the state is **Available**.
+
+---
+
 ## Subnets / route tables filter vs security groups
 
 | Page | Filter `Lab1-VPC` |

@@ -314,6 +314,8 @@ Include this Routes view in your screenshot if it does not fit in the list view.
 
 **Console path:** VPC → **NAT gateways** → **Create NAT gateway**
 
+> **Console tip — Availability mode:** AWS may default to **Regional**, which only shows a **VPC** dropdown (no subnet picker). For this lab, select **Zonal** first — that unlocks the **Subnet** field so you can choose `Public-Subnet-A`. **Connectivity type** stays **Public**.
+
 ### Do this
 
 1. Configure:
@@ -321,6 +323,7 @@ Include this Routes view in your screenshot if it does not fit in the list view.
 | Setting | Value |
 |---------|-------|
 | **Name** | `Lab1-NAT` |
+| **Availability mode** | **Zonal** (required to select a subnet) |
 | **Subnet** | `Public-Subnet-A` |
 | **Connectivity type** | Public |
 | **Elastic IP allocation ID** | Click **Allocate Elastic IP** (creates a new EIP) |
@@ -669,6 +672,7 @@ AWS Network Firewall creates **VPC endpoints** in your firewall subnet for traff
 |-------|----------------|----------|
 | **Security groups: “No matching resource found” for `Lab1-VPC`** | Search box matches SG fields, not VPC name tag | Search **`Web-SG`** / **`Firewall-SG`**, or match **VPC ID** column to your lab VPC |
 | **Subnets filter works but Security groups filter does not** | Expected AWS behavior | Use the [resource finder table](#aws-console-how-to-find-your-lab-resources) above |
+| **No Subnet field on NAT create page** | **Regional** availability mode selected | Switch **Availability mode** to **Zonal**, then select `Public-Subnet-A` |
 | Can't create NAT Gateway | No Elastic IP available | Click **Allocate Elastic IP** on the NAT creation page |
 | NAT stuck in Pending | Subnet not public | Confirm NAT is in `Public-Subnet-A` and Public-RT has 0.0.0.0/0 → IGW |
 | Private subnet has no internet (later labs) | Missing NAT route | Add 0.0.0.0/0 → Lab1-NAT on `Private-RT` |

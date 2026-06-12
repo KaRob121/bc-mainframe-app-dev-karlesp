@@ -68,6 +68,7 @@ The VPC also has a **main** route table — that is normal. Lab subnets must use
 | Field | Expected value |
 |-------|----------------|
 | Name | `Lab1-NAT` |
+| Availability mode | **Zonal** (console default may be Regional — switch to Zonal to pick a subnet) |
 | State | Available |
 | Subnet | Public-Subnet-A |
 | Connectivity | Public |
