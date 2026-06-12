@@ -547,7 +547,9 @@ Click **Create security group**.
 | **Name** | `Allow-Web-Traffic` |
 | **Capacity** | 100 |
 
-3. Under **Stateful rule order**, add:
+> **Console tip:** On **Create Network Firewall rule group**, set the **rule group name** at the **top** of the page (`Allow-Web-Traffic`). Under **Standard stateful rules**, select **5-tuple** — **not** **Category matching**. Category matching does not provide named rules or TCP port actions. Skip **IP set reference** (leave empty).
+
+3. Under **Stateful rule order** (5-tuple mode), click **Add rule** and add:
 
 | Rule name | Source | Destination | Protocol | Action |
 |-----------|--------|-------------|----------|--------|

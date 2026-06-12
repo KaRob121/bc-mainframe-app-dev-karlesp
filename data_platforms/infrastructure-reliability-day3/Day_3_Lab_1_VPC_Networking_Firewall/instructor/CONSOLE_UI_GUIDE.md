@@ -70,6 +70,20 @@ Quick reference when a participant says “I can’t find my resource.”
 
 ---
 
+## Network Firewall Step 8 — Category matching vs 5-tuple
+
+**Symptom:** Student is on **Create Network Firewall rule group** but cannot name rules or set HTTP/TCP ports.
+
+**Cause:** **Category matching** is selected under **Standard stateful rules**. That mode filters AWS threat categories — it does not create custom named rules.
+
+**Fix (tell the student):**
+1. Scroll to the **top** — rule group name **`Allow-Web-Traffic`**, capacity **100**
+2. Under **Standard stateful rules**, click **5-tuple** (not Category matching)
+3. Click **Add rule** — fields appear for **Rule name**, Source, Destination, Protocol (**TCP:80**, **TCP:443**, **TCP:22**), Action (**PASS** / **DROP**)
+4. Skip **IP set reference**
+
+---
+
 ## Screenshot grading notes
 
 | Step | Accept if screenshot shows |
