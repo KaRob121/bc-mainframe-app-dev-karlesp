@@ -16,7 +16,6 @@
    - Their public IP for SSH NACL/SG rules (`x.x.x.x/32`)
    - Tear down NAT and Firewall within 1 hour to limit cost (~$0.45)
    - **Security groups:** do **not** search `Lab1-VPC` — search **`Web-SG`** / **`Firewall-SG`** instead
-5. Point students to reference screenshots in **[screenshots/reference/](../screenshots/reference/)** when the console UI is unclear.
 
 ---
 
@@ -76,25 +75,6 @@ After you build the lab manually (or with `--deploy`), all checks should print `
 | SSH rule uses bare IP | Must be CIDR: `203.0.113.45/32` |
 | NACL deny rule number too low | DENY must be rule 200, after ALLOW rules 100–130 |
 | Deletes VPC before NAT/Firewall | Delete firewall and NAT first, release EIP, then VPC |
-
----
-
-## Reference screenshots (instructor demo)
-
-Validated UI captures live in **[screenshots/reference/](../screenshots/reference/)**. Use when live-demoing or when a student shares a confusing screen:
-
-| Step | Reference file | Key UI element |
-|------|----------------|----------------|
-| 1 | `Step_01_VPC_Created.png` | Lab1-VPC in Your VPCs list |
-| 2 | `Step_02_Subnets_Created.png` | Filter `Lab1-VPC` → 3 subnets |
-| 3 | `Step_03_IGW_Attached.png` | Lab1-IGW Attached to Lab1-VPC |
-| 4 | `Step_04_Route_Tables.png` | 3 custom RTs + Main row |
-| 5 | `Step_05_NAT_GatewaypartA/B.png` | NAT Available + Private-RT NAT route |
-| 6 | `Step_06_NACL_Rules.png` + `part2` | Inbound rules + Private-Subnet-B association |
-| 7 | `Step_07_Security_Groupsparta/b.png` | Web-SG and Firewall-SG inbound (search by name!) |
-| 8 | `Step_08_Network_Firewall.png` | Lab1-Firewall-Policy + Allow-Web-Traffic |
-| 9 | `Step_09_Firewall_Endpoint.png` | Firewall-Subnet-A details |
-| — | `Lab 1.png` | VPC Resource map overview |
 
 ---
 

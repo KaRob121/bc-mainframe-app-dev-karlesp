@@ -26,7 +26,6 @@
 | Region | **us-east-1** (required) |
 | Architecture diagram | [diagrams/lab1-vpc-architecture.svg](diagrams/lab1-vpc-architecture.svg) |
 | Screenshot guide | [screenshots/README.md](screenshots/README.md) |
-| Reference UI screenshots | [screenshots/reference/](screenshots/reference/) |
 
 > **Instructor materials** (setup guide, answer key, validation script) are in the [`instructor/`](instructor/) folder.
 

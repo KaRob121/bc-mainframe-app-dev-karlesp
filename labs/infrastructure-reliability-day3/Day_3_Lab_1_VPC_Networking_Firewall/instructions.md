@@ -14,7 +14,6 @@ All paths below are relative to the **Lab 1 folder** (`Day_3_Lab_1_VPC_Networkin
 | Lab instructions | `instructions.md` | This file — Steps 1–9 |
 | Architecture diagram | `diagrams/lab1-vpc-architecture.svg` | Reference |
 | Screenshot naming guide | `screenshots/README.md` | After each step |
-| Reference UI screenshots | `screenshots/reference/` | When the console looks confusing |
 | Instructor setup (instructors only) | `instructor/AWS_LAB1_SETUP.md` | Pre-class |
 
 ---
@@ -42,14 +41,12 @@ The console search box behavior **varies by page**. Use this table to avoid “N
 | **Internet gateways** | Sometimes — may need to scroll | Look for `Lab1-IGW` |
 | **NAT gateways** | Search by name | Search `Lab1-NAT` |
 | **Network ACLs** | Search by name | Search `Web-Subnet-NACL` |
-| **Security groups** | **No** — returns empty | Search **`Web-SG`** or **`Firewall-SG`**, or use VPC ID `vpc-08f4d75f65b634186` in the **VPC** column |
+| **Security groups** | **No** — returns empty | Search **`Web-SG`** or **`Firewall-SG`**, or match your lab VPC ID in the **VPC** column |
 | **Network Firewall** | N/A — use left menu | **Network Firewall** → **Firewalls** |
 
 **Left navigation:** On every VPC page, the sidebar shows **Virtual private cloud** (Your VPCs, Subnets, Route tables, …) and **Security** (Network ACLs, Security groups). Stay in **VPC** service — do not open the separate **EC2 → Security Groups** page unless your instructor directs you there (both work, but this lab uses the VPC console path).
 
 **Default resources:** Your account may already have a **default VPC** (`172.31.0.0/16`) and a default Internet Gateway. That is normal. You are building a **separate** lab VPC named **`Lab1-VPC`** (`10.0.0.0/16`).
-
-**Reference screenshots:** Instructors and participants can compare their screen to images in **[screenshots/reference/](screenshots/reference/)**. See [screenshots/README.md](screenshots/README.md) for the filename list.
 
 ---
 
@@ -89,7 +86,7 @@ By the end of this lab, you will be able to:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-**End-of-lab check (optional):** VPC → **Your VPCs** → select **`Lab1-VPC`** → **Resource map** tab. You should see subnets, route tables, IGW, and NAT connected (see reference image [screenshots/reference/Lab 1.png](screenshots/reference/Lab%201.png)).
+**End-of-lab check (optional):** VPC → **Your VPCs** → select **`Lab1-VPC`** → **Resource map** tab. You should see subnets, route tables, IGW, and NAT connected.
 
 ---
 
@@ -114,7 +111,6 @@ By the end of this lab, you will be able to:
 
 ### What you should see
 
-![Reference: Step 1 VPC list](screenshots/reference/Step_01_VPC_Created.png)
 
 | Column | Expected for Lab1-VPC |
 |--------|------------------------|
@@ -180,7 +176,6 @@ You may also see a **default VPC** with CIDR `172.31.0.0/16` and no name — ign
 
 ### What you should see
 
-![Reference: Step 2 Subnets list](screenshots/reference/Step_02_Subnets_Created.png)
 
 | Name | IPv4 CIDR | VPC column |
 |------|-----------|------------|
@@ -216,7 +211,6 @@ All **State** = **Available**.
 
 ### What you should see
 
-![Reference: Step 3 Internet Gateway attached](screenshots/reference/Step_03_IGW_Attached.png)
 
 | Column | Expected |
 |--------|----------|
@@ -281,7 +275,6 @@ You will create **three** custom route tables and associate each with one subnet
 
 ### What you should see
 
-![Reference: Step 4 Route tables list](screenshots/reference/Step_04_Route_Tables.png)
 
 Filter **Route tables** with **`Lab1-VPC`**. Expect **four** rows:
 
@@ -350,7 +343,6 @@ Include this Routes view in your screenshot if it does not fit in the list view.
 
 **Part A — NAT detail** (click `Lab1-NAT` in the list):
 
-![Reference: Step 5 NAT Gateway detail](screenshots/reference/Step_05_NAT_GatewaypartA.png)
 
 | Field | Expected |
 |-------|----------|
@@ -362,7 +354,6 @@ Include this Routes view in your screenshot if it does not fit in the list view.
 
 **Part B — Private-RT routes:**
 
-![Reference: Step 5 Private-RT NAT route](screenshots/reference/Step_05_NAT_GatewaypartB.png)
 
 | Destination | Target | Status |
 |-------------|--------|--------|
@@ -431,14 +422,12 @@ Replace **YOUR-IP/32** with the IP from [Before you start](#before-you-start-par
 
 **Part A — Inbound rules + Details:**
 
-![Reference: Step 6 NACL inbound rules](screenshots/reference/Step_06_NACL_Rules.png)
 
 - **Details** panel: **Associated with** → `Private-Subnet-B`
 - **Inbound rules:** 100–130 ALLOW, 200 DENY, plus default `*` DENY at bottom (AWS default — expected)
 
 **Part B — Subnet associations tab:**
 
-![Reference: Step 6 NACL subnet association](screenshots/reference/Step_06_NACL_Rulespart2.png)
 
 - One row: **`Private-Subnet-B`** · CIDR `10.0.2.0/24` · AZ `us-east-1b`
 
@@ -510,7 +499,6 @@ Click **Create security group**.
 
 **Part A — Web-SG → Inbound rules:**
 
-![Reference: Step 7 Web-SG inbound rules](screenshots/reference/Step_07_Security_Groupsparta.png)
 
 | Type | Port | Source |
 |------|------|--------|
@@ -519,7 +507,6 @@ Click **Create security group**.
 
 **Part B — Firewall-SG → Inbound rules:**
 
-![Reference: Step 7 Firewall-SG inbound rules](screenshots/reference/Step_07_Security_Groupspartb.png)
 
 | Type | Port | Source |
 |------|------|--------|
@@ -596,7 +583,6 @@ Click **Create security group**.
 
 **Firewall policy:** **Network Firewall** → **Firewall policies** → **`Lab1-Firewall-Policy`**:
 
-![Reference: Step 8 Firewall policy](screenshots/reference/Step_08_Network_Firewall.png)
 
 - **Stateful rule groups (1):** `Allow-Web-Traffic` · Capacity **100**
 - **Capacity units consumed by stateful rule groups:** **100/30,000**
@@ -631,7 +617,6 @@ AWS Network Firewall creates **VPC endpoints** in your firewall subnet for traff
 
 **Alternate verification:** VPC → **Subnets** → **`Firewall-Subnet-A`** → **Details** tab — Route table = **`Firewall-RT`**, State = **Available**:
 
-![Reference: Step 9 Firewall subnet details](screenshots/reference/Step_09_Firewall_Endpoint.png)
 
 ### Verify
 
@@ -661,7 +646,7 @@ AWS Network Firewall creates **VPC endpoints** in your firewall subnet for traff
 | 8 | AWS Network Firewall deployed | ☐ |
 | 9 | (Optional) Firewall endpoint reviewed | ☐ |
 
-**Optional overview screenshot:** VPC → **`Lab1-VPC`** → **Resource map** tab (see [screenshots/reference/Lab 1.png](screenshots/reference/Lab%201.png)).
+**Optional overview screenshot:** VPC → **`Lab1-VPC`** → **Resource map** tab.
 
 ---
 

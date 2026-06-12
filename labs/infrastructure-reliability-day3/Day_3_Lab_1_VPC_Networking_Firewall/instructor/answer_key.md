@@ -2,7 +2,6 @@
 
 Use this to verify student submissions (screenshots or live console review). All resources must be in **`us-east-1`** inside VPC **`Lab1-VPC`**.
 
-**Reference UI screenshots:** [screenshots/reference/](../screenshots/reference/)  
 **Console troubleshooting:** [CONSOLE_UI_GUIDE.md](CONSOLE_UI_GUIDE.md)
 
 ---
